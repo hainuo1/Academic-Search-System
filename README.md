@@ -40,7 +40,9 @@ AcademicSearchSystem
 │   ├── profile.html
 │   ├── my_documents.html
 │   ├── citation.html
+|   ├── base.html
 │   └── error.html
+|   
 │
 ├── uploads
 │   └── PDF files
