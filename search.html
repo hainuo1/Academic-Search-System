@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学术文献检索系统 - 搜索</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .result-card {
+                transition: all 0.2s ease;
+            }
+            .result-card:hover {
+                background-color: #F8FAFF;
+                border-left: 4px solid #165DFF;
+            }
+            .form-item {
+                transition: all 0.2s ease;
+            }
+            .form-item:hover {
+                transform: translateX(2px);
+            }
+            .input-focus {
+                @apply focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-all;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- 导航栏 -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="text-xl font-bold text-primary">
+                        <i class="fa fa-book mr-2"></i>学术文献检索系统
+                    </a>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="/search" class="text-gray-700 hover:text-primary transition-colors">
+                        <i class="fa fa-search mr-1"></i>搜索
+                    </a>
+                    <a href="/upload" class="text-gray-700 hover:text-primary transition-colors">
+                        <i class="fa fa-upload mr-1"></i>上传
+                    </a>
+                    <a href="/my_documents" class="text-gray-700 hover:text-primary transition-colors">
+                        <i class="fa fa-file-text-o mr-1"></i>我的文档
+                    </a>
+                    <a href="/favorites" class="text-gray-700 hover:text-primary transition-colors">
+                        <i class="fa fa-star-o mr-1"></i>收藏
+                    </a>
+                    <a href="/history" class="text-gray-700 hover:text-primary transition-colors">
+                        <i class="fa fa-history mr-1"></i>历史
+                    </a>
+                    <a href="/stats" class="text-gray-700 hover:text-primary transition-colors">
+                        <i class="fa fa-bar-chart mr-1"></i>统计
+                    </a>
+                    <div class="relative group pb-2">
+                        <button class="flex items-center text-gray-700 hover:text-primary transition-colors">
+                            <i class="fa fa-user-circle-o mr-1"></i>{{ username }}
+                            <i class="fa fa-caret-down ml-1"></i>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block z-50">
+                            <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <i class="fa fa-cog mr-2"></i>个人设置
+                            </a>
+                            <a href="/logout" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                                <i class="fa fa-sign-out mr-2"></i>退出登录
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- 搜索栏 -->
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <form action="/search" method="get" class="space-y-4">
+                <div class="flex space-x-4">
+                    <div class="flex-1">
+                        <div class="flex">
+                            <input type="text" name="keyword" value="{{ keyword }}" placeholder="请输入搜索关键词"
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-l-lg input-focus">
+                            <select name="search_type" class="px-4 py-2 border border-gray-300 border-l-0 input-focus">
+                                <option value="title" {% if search_type == 'title' %}selected{% endif %}>标题</option>
+                                <option value="author" {% if search_type == 'author' %}selected{% endif %}>作者</option>
+                                <option value="category" {% if search_type == 'category' %}selected{% endif %}>分类</option>
+                                <option value="keyword" {% if search_type == 'keyword' %}selected{% endif %}>关键词</option>
+                            </select>
+                            <button type="submit" class="bg-primary text-white px-6 py-2 rounded-r-lg hover:bg-primary/90 transition-colors min-w-[80px] whitespace-nowrap">
+                                <i class="fa fa-search mr-1"></i>搜索
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 高级筛选 - 默认直接展开 -->
+                <div class="border-t pt-4">
+                    <button type="button" id="toggle-advanced" class="text-sm text-gray-500 hover:text-primary flex items-center">
+                        <i class="fa fa-filter mr-1"></i>高级筛选 <i class="fa fa-chevron-up ml-1" id="filter-icon"></i>
+                    </button>
+                    <div id="advanced-filters" class="mt-4 grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">标题包含</label>
+                            <input type="text" name="title" value="{{ request.args.get('title', '') }}"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">作者包含</label>
+                            <input type="text" name="author" value="{{ request.args.get('author', '') }}"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">分类</label>
+                            <input type="text" name="category" value="{{ request.args.get('category', '') }}"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">关键词</label>
+                            <input type="text" name="keyword_filter" value="{{ request.args.get('keyword_filter', '') }}"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">发布日期从</label>
+                            <input type="date" name="start_date" value="{{ request.args.get('start_date', '') }}"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">发布日期至</label>
+                            <input type="date" name="end_date" value="{{ request.args.get('end_date', '') }}"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md input-focus">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- 搜索结果 -->
+        {% if keyword %}
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="mb-4 text-gray-600">
+                共找到 <span class="font-semibold text-primary">{{ total_count }}</span> 条结果
+            </div>
+
+            {% if results %}
+            <div class="space-y-4">
+                {% for doc in results %}
+                <div class="result-card p-4 border-l-4 border-transparent rounded-md">
+                    <h3 class="text-lg font-semibold mb-2">
+                        <a href="/document/{{ doc.DocumentID }}" class="text-primary hover:underline">
+                            {{ doc.Title }}
+                        </a>
+                    </h3>
+                    <div class="flex flex-wrap text-sm text-gray-500 space-x-4 mb-2">
+                        <span><i class="fa fa-user mr-1"></i>{{ doc.Author }}</span>
+                        <span><i class="fa fa-folder mr-1"></i>{{ doc.Category }}</span>
+                        <span><i class="fa fa-calendar mr-1"></i>{{ doc.PublishDate }}</span>
+                        {% if doc.TF_IDF %}
+                        <span><i class="fa fa-bolt mr-1"></i>相关度: {{ "%.2f"|format(doc.TF_IDF) }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="flex space-x-4">
+                        <a href="/document/{{ doc.DocumentID }}" class="text-sm text-primary hover:underline">
+                            <i class="fa fa-eye mr-1"></i>查看详情
+                        </a>
+                        <a href="/download/{{ doc.DocumentID }}" class="text-sm text-green-600 hover:underline">
+                            <i class="fa fa-download mr-1"></i>下载PDF
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- 分页 -->
+            {% if total_pages > 1 %}
+            <div class="mt-8 flex justify-center">
+                <nav class="inline-flex rounded-md shadow-sm">
+                    {% if page > 1 %}
+                    <a href="{{ request.path }}?{{ request.query_string.decode().replace('page='+page|string, 'page='+(page-1)|string) }}"
+                       class="px-4 py-2 border border-gray-300 rounded-l-md text-gray-700 hover:bg-gray-50">
+                        上一页
+                    </a>
+                    {% endif %}
+
+                    {% for p in range(1, total_pages+1) %}
+                        {% if p == page %}
+                        <span class="px-4 py-2 border border-primary bg-primary text-white">
+                            {{ p }}
+                        </span>
+                        {% else %}
+                        <a href="{{ request.path }}?{{ request.query_string.decode().replace('page='+page|string, 'page='+p|string) if 'page=' in request.query_string.decode() else request.query_string.decode()+'&page='+p|string }}"
+                           class="px-4 py-2 border border-gray-300 text-gray-700 hover:bg-gray-50">
+                            {{ p }}
+                        </a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page < total_pages %}
+                    <a href="{{ request.path }}?{{ request.query_string.decode().replace('page='+page|string, 'page='+(page+1)|string) }}"
+                       class="px-4 py-2 border border-gray-300 rounded-r-md text-gray-700 hover:bg-gray-50">
+                        下一页
+                    </a>
+                    {% endif %}
+                </nav>
+            </div>
+            {% endif %}
+
+            {% else %}
+            <div class="text-center py-12 text-gray-500">
+                <i class="fa fa-search-minus text-4xl mb-4"></i>
+                <p>未找到相关文献，请尝试其他关键词</p>
+            </div>
+            {% endif %}
+        </div>
+        {% else %}
+        <div class="bg-white rounded-lg shadow-sm p-12 text-center text-gray-500">
+            <i class="fa fa-search text-5xl mb-4 text-gray-300"></i>
+            <p class="text-lg">输入关键词开始搜索学术文献</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- 高级筛选切换脚本 -->
+    <script>
+        document.getElementById('toggle-advanced').addEventListener('click', function() {
+            const filters = document.getElementById('advanced-filters');
+            const icon = document.getElementById('filter-icon');
+            filters.classList.toggle('hidden');
+            icon.classList.toggle('fa-chevron-down');
+            icon.classList.toggle('fa-chevron-up');
+        });
+    </script>
+</body>
+</html>

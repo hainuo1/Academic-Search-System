@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}个人信息 - 学术文献检索系统{% endblock %}
+
+{% block extra_head %}
+<style type="text/tailwindcss">
+    @layer utilities {
+        .content-auto {
+            content-visibility: auto;
+        }
+        .form-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .form-card:hover {
+            box-shadow: 0 8px 24px rgba(22, 93, 255, 0.1);
+        }
+        .input-focus {
+            @apply focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-all;
+        }
+                /* 搜索关键词高亮样式 */
+
+        .search-highlight {
+            background-color: #fff3cd;
+            color: #d97706;
+            font-weight: bold;
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- 主内容区 -->
+<main class="max-w-4xl mx-auto px-4 py-12">
+    <!-- 页面标题 -->
+    <div class="mb-10">
+        <div class="flex items-center mb-3">
+            <div class="w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center mr-4 shadow-lg">
+                <i class="fa fa-user text-white text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">个人信息</h1>
+                <p class="text-gray-500 mt-1">管理您的账号信息，保障账号安全</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 提示信息 -->
+    {% if error %}
+    <div class="mb-8 bg-red-50 border border-red-100 text-red-600 px-6 py-4 rounded-2xl flex items-center">
+        <i class="fa fa-exclamation-circle mr-3 text-xl"></i>
+        <span>{{ error }}</span>
+    </div>
+    {% endif %}
+    {% if success %}
+    <div class="mb-8 bg-green-50 border border-green-100 text-green-600 px-6 py-4 rounded-2xl flex items-center">
+        <i class="fa fa-check-circle mr-3 text-xl"></i>
+        <span>{{ success }}</span>
+    </div>
+    {% endif %}
+
+    <!-- 账号信息展示 -->
+    <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 p-6 mb-8">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+            <i class="fa fa-id-card-o text-primary mr-2"></i>
+            账号基本信息
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-gray-50 rounded-xl p-4">
+                <label class="text-sm text-gray-500 mb-1 block">账号（不可修改）</label>
+                <div class="text-lg font-medium text-gray-800">{{ masked_username }}</div>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-4">
+                <label class="text-sm text-gray-500 mb-1 block">绑定邮箱</label>
+                <div class="text-lg font-medium text-gray-800">{{ masked_email }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 修改邮箱卡片 -->
+    <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 p-6 mb-8 form-card">
+        <h3 class="text-lg font-semibold text-gray-800 mb-6 flex items-center">
+            <i class="fa fa-envelope-o text-primary mr-2"></i>
+            修改绑定邮箱
+        </h3>
+        <form method="POST" class="space-y-6">
+            <input type="hidden" name="action" value="change_email">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">当前密码（验证身份）</label>
+                    <input type="password" name="current_password" required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus"
+                        placeholder="请输入当前账号密码">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">新邮箱地址</label>
+                    <input type="email" name="new_email" required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus"
+                        placeholder="请输入新的邮箱地址">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">确认新邮箱</label>
+                    <input type="email" name="confirm_new_email" required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus"
+                        placeholder="再次输入新邮箱地址">
+                </div>
+            </div>
+            <button type="submit"
+                class="w-full py-3 px-6 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-all shadow-md hover:shadow-lg flex items-center justify-center">
+                <i class="fa fa-save mr-2"></i>
+                保存新邮箱
+            </button>
+        </form>
+    </div>
+
+    <!-- 修改密码卡片 -->
+    <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 p-6 form-card">
+        <h3 class="text-lg font-semibold text-gray-800 mb-6 flex items-center">
+            <i class="fa fa-lock text-primary mr-2"></i>
+            修改账号密码
+        </h3>
+        <form method="POST" class="space-y-6">
+            <input type="hidden" name="action" value="change_password">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">当前邮箱（验证身份）</label>
+                    <input type="email" name="current_email" required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus"
+                        placeholder="请输入当前绑定的邮箱">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">新密码</label>
+                    <input type="password" name="new_password" required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus"
+                        placeholder="8-50位，不能包含空格">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">确认新密码</label>
+                    <input type="password" name="confirm_new_password" required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus"
+                        placeholder="再次输入新密码">
+                </div>
+            </div>
+            <button type="submit"
+                class="w-full py-3 px-6 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-all shadow-md hover:shadow-lg flex items-center justify-center">
+                <i class="fa fa-save mr-2"></i>
+                保存新密码
+            </button>
+        </form>
+    </div>
+</main>
+{% endblock %}

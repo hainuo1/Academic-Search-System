@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% block title %}我的检索历史 - 学术文献检索系统{% endblock %}
+{% block extra_head %}
+<style type="text/tailwindcss">
+    @layer utilities {
+        .content-auto {
+            content-visibility: auto;
+        }
+        .history-item {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .history-item:hover {
+            transform: translateX(8px);
+            background: linear-gradient(90deg, rgba(22, 93, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%);
+        }
+        .btn-hover {
+            transition: all 0.2s ease;
+        }
+        .btn-hover:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(22, 93, 255, 0.3);
+        }
+        .empty-illustration {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+    }
+</style>
+{% endblock %}
+{% block content %}
+<!-- 主内容区 -->
+<main class="max-w-4xl mx-auto px-4 py-12">
+    <!-- 页面标题 -->
+    <div class="mb-10">
+        <div class="flex items-center mb-3">
+            <div class="w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center mr-4 shadow-lg">
+                <i class="fa fa-history text-white text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">我的检索历史</h1>
+                <p class="text-gray-500 mt-1">查看您过去的检索记录，一键重新搜索</p>
+            </div>
+        </div>
+    </div>
+    <!-- 历史记录卡片 -->
+    <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+        {% if histories %}
+        <!-- 有历史记录的情况 -->
+        <div class="p-6">
+            <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
+                <span class="text-sm font-medium text-gray-500 uppercase tracking-wider">全部检索记录</span>
+                <span class="text-xs bg-primary/10 text-primary px-3 py-1 rounded-full">共 {{ histories|length }} 条记录</span>
+            </div>
+            <div class="space-y-2">
+                {% for row in histories %}
+                <div class="history-item flex flex-col md:flex-row md:items-center justify-between gap-3 px-4 py-4 rounded-xl">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fa fa-search text-primary"></i>
+                        </div>
+                        <div>
+                            <a href="/search?keyword={{ row.SearchKeyword }}&search_type=keyword"
+                               class="text-lg font-semibold text-primary hover:underline">
+                                {{ row.SearchKeyword }}
+                            </a>
+                            <p class="text-xs text-gray-400 mt-0.5">点击关键词可快速重新搜索</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <span class="flex items-center text-gray-500 text-sm">
+                            <i class="fa fa-clock-o mr-1.5"></i>
+                            {{ row.SearchTime }}
+                        </span>
+                        <a href="/search?keyword={{ row.SearchKeyword }}&search_type=keyword"
+                           class="btn-hover inline-flex items-center px-4 py-2 border border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition-all text-sm font-medium">
+                            <i class="fa fa-redo mr-1.5"></i>
+                            重新搜索
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <!-- 空状态 -->
+        <div class="p-16 text-center">
+            <div class="empty-illustration w-32 h-32 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center mx-auto mb-8">
+                <i class="fa fa-clock-o text-primary text-5xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-3">暂无检索历史</h3>
+            <p class="text-gray-500 text-lg mb-8 max-w-md mx-auto">
+                您还没有进行过任何检索，开始探索学术世界，搜索您需要的文献吧！
+            </p>
+            <a href="/search" class="btn-hover inline-flex items-center px-8 py-4 bg-gradient-to-r from-primary to-secondary text-white rounded-2xl font-medium shadow-lg">
+                <i class="fa fa-search mr-3 text-lg"></i>
+                去检索文献
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    <!-- 小提示卡片 -->
+    <div class="mt-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100">
+        <div class="flex items-start">
+            <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center mr-4 shadow-sm">
+                <i class="fa fa-lightbulb-o text-primary"></i>
+            </div>
+            <div>
+                <h4 class="font-semibold text-gray-800 mb-1">小提示</h4>
+                <p class="text-gray-600 text-sm">
+                    您的检索历史会自动保存，方便您随时回顾过去的搜索，系统仅保留最近100条搜索记录。点击"重新搜索"按钮可以快速执行相同的检索，无需重新输入关键词！
+                </p>
+            </div>
+        </div>
+    </div>
+</main>
+            <!-- 分页导航 -->
+{% if total_pages > 1 %}
+<div class="mt-10">
+    <div class="text-center text-gray-500 mb-4">
+        共 {{ total_count }} 条记录 · 第 {{ page }} / {{ total_pages }} 页
+    </div>
+    <div class="flex justify-center items-center gap-2 flex-wrap">
+        {% if page > 1 %}
+        <a
+            href="/history?page={{ page-1 }}"
+            class="px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition"
+        >
+            ← 上一页
+        </a>
+        {% endif %}
+        {% if page > 3 %}
+        <a
+            href="/history?page=1"
+            class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+        >
+            1
+        </a>
+        {% if page > 4 %}
+        <span class="px-2 text-gray-400">
+            ...
+        </span>
+        {% endif %}
+        {% endif %}
+        {% for p in range(1, total_pages + 1) %}
+            {% if p >= page-2 and p <= page+2 %}
+            <a
+                href="/history?page={{ p }}"
+                class="
+                px-4 py-2 rounded-lg border shadow-sm transition
+                {% if p == page %}
+                    bg-primary text-white border-primary
+                {% else %}
+                    bg-white border-gray-300 hover:bg-gray-50
+                {% endif %}
+                "
+            >
+                {{ p }}
+            </a>
+            {% endif %}
+        {% endfor %}
+        {% if page < total_pages - 2 %}
+            {% if page < total_pages - 3 %}
+            <span class="px-2 text-gray-400">
+                ...
+            </span>
+            {% endif %}
+            <a
+                href="/history?page={{ total_pages }}"
+                class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+            >
+                {{ total_pages }}
+            </a>
+        {% endif %}
+        {% if page < total_pages %}
+        <a
+            href="/history?page={{ page+1 }}"
+            class="px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition"
+        >
+            下一页 →
+        </a>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

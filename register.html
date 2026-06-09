@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}注册 - 学术文献检索系统{% endblock %}
+
+{% block content %}
+<div class="bg-gradient-to-br from-blue-50 to-indigo-50 min-h-screen flex items-center justify-center py-12 px-4">
+    <div class="max-w-md w-full bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <div class="bg-primary text-white p-8 text-center">
+            <i class="fa fa-user-plus text-4xl mb-4"></i>
+            <h2 class="text-2xl font-bold">创建新账户</h2>
+            <p class="text-blue-100 mt-2">加入学术文献检索系统</p>
+        </div>
+
+        <div class="p-8">
+            {% if error %}
+            <div class="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6 flex items-center">
+                <i class="fa fa-exclamation-circle mr-2"></i>
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <form action="/register" method="post">
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-medium mb-2" for="username">
+                        用户名
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <i class="fa fa-user"></i>
+                        </span>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                            placeholder="请输入用户名（2-20个字符）"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-medium mb-2" for="email">
+                        邮箱
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <i class="fa fa-envelope"></i>
+                        </span>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                            placeholder="请输入您的邮箱"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-medium mb-2" for="password">
+                        密码
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <i class="fa fa-lock"></i>
+                        </span>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                            placeholder="请输入密码（8-50个字符，不含空格）"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="mb-6">
+    <label class="block text-gray-700 font-medium mb-2" for="confirm_password">
+        确认密码
+    </label>
+
+    <div class="relative">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+            <i class="fa fa-lock"></i>
+        </span>
+
+        <input
+            type="password"
+            id="confirm_password"
+            name="confirm_password"
+            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+            placeholder="请再次输入密码"
+            required
+        >
+    </div>
+</div>
+
+                <button
+                    type="submit"
+                    class="w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-secondary transition-colors mb-4"
+                >
+                    注册
+                </button>
+
+                <div class="text-center text-gray-600">
+                    已有账户？
+                    <a href="/login" class="text-primary hover:underline">立即登录</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

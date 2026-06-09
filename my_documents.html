@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}
+我的文献
+{% endblock %}
+
+{% block content %}
+
+<div class="container mx-auto px-6 py-8">
+
+<div class="bg-white shadow-lg rounded-xl p-6">
+
+    <div class="flex justify-between items-center mb-6">
+
+        <h2 class="text-3xl font-bold text-gray-800">
+            我的上传文献
+        </h2>
+
+        <a
+            href="/upload"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+        >
+            上传新文献
+        </a>
+
+    </div>
+
+    {% if my_docs %}
+
+    <div class="overflow-x-auto">
+
+        <table class="min-w-full border border-gray-200">
+
+            <thead>
+
+                <tr class="bg-gray-100">
+
+                    <th class="px-4 py-3 border">
+                        ID
+                    </th>
+
+                    <th class="px-4 py-3 border">
+                        标题
+                    </th>
+
+                    <th class="px-4 py-3 border">
+                        作者
+                    </th>
+
+                    <th class="px-4 py-3 border">
+                        发表日期
+                    </th>
+
+                    <th class="px-4 py-3 border">
+                        操作
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for doc in my_docs %}
+
+                <tr class="hover:bg-gray-50">
+
+                    <td class="border px-4 py-3 text-center">
+                        {{ doc.DocumentID }}
+                    </td>
+
+                    <td class="border px-4 py-3">
+                        {{ doc.Title }}
+                    </td>
+
+                    <td class="border px-4 py-3">
+                        {{ doc.Author }}
+                    </td>
+
+                    <td class="border px-4 py-3 text-center">
+                        {{ doc.PublishDate }}
+                    </td>
+
+                    <td class="border px-4 py-3">
+
+                        <div class="flex gap-2 flex-wrap">
+
+                            <a
+                                href="/document/{{ doc.DocumentID }}"
+                                class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
+                            >
+                                查看
+                            </a>
+
+                            <a
+                                href="/citation/{{ doc.DocumentID }}"
+                                class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded"
+                            >
+                                设置引用
+                            </a>
+
+                            <a
+                                href="/download/{{ doc.DocumentID }}"
+                                class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
+                            >
+                                下载
+                            </a>
+
+                            <a
+                                href="/delete_document/{{ doc.DocumentID }}"
+                                onclick="return confirm('确定删除该文献吗？');"
+                                class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+                            >
+                                删除
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+    <div class="text-center py-16">
+
+        <div class="text-6xl mb-4">
+            📚
+        </div>
+
+        <p class="text-gray-500 text-lg">
+            您暂时还没有上传任何文献
+        </p>
+
+        <a
+            href="/upload"
+            class="inline-block mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg"
+        >
+            立即上传
+        </a>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+</div>
+
+{% endblock %}

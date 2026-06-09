@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}数据统计 - 学术文献检索系统{% endblock %}
+
+{% block extra_script %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<!-- 统计内容 -->
+<main class="max-w-7xl mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold text-gray-800 mb-8">系统数据统计</h1>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- 热门关键词 -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-lg font-semibold text-gray-800 mb-6 flex items-center">
+                <i class="fa fa-fire text-orange-500 mr-2"></i>热门关键词排行
+            </h2>
+            <div class="space-y-3">
+                {% for keyword in keyword_rank %}
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-700">{{ keyword.SearchKeyword }}</span>
+                    <span class="bg-blue-100 text-primary px-2 py-1 rounded text-sm">{{ keyword.cnt }} 次</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- 活跃用户 -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-lg font-semibold text-gray-800 mb-6 flex items-center">
+                <i class="fa fa-users text-green-500 mr-2"></i>活跃用户排行
+            </h2>
+            <div class="space-y-3">
+                {% for user in user_rank %}
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-700">{{ user.UserName }}</span>
+                    <span class="bg-green-100 text-green-600 px-2 py-1 rounded text-sm">{{ user.cnt }} 次检索</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- 高被引文献 -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-lg font-semibold text-gray-800 mb-6 flex items-center">
+                <i class="fa fa-trophy text-yellow-500 mr-2"></i>高被引文献排行
+            </h2>
+            <div class="space-y-3">
+                {% for cite in citation_rank %}
+                <div class="flex justify-between items-start">
+                    <span class="text-gray-700 line-clamp-2">{{ cite.Title }}</span>
+                    <span class="bg-yellow-100 text-yellow-600 px-2 py-1 rounded text-sm whitespace-nowrap ml-2">{{ cite.cnt }} 次引用</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

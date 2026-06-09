@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}学术文献检索系统{% endblock %}
+
+{% block extra_head %}
+<style type="text/tailwindcss">
+    @layer utilities {
+        .content-auto {
+            content-visibility: auto;
+        }
+        .text-shadow {
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(22, 93, 255, 0.1);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- 这里只保留index.html独有的主内容区代码 -->
+<div class="bg-gradient-to-br from-blue-50 to-indigo-50 min-h-screen">
+    <div class="max-w-4xl mx-auto px-4 py-20">
+        <div class="text-center mb-16">
+            <h1 class="text-[clamp(2.5rem,5vw,4rem)] font-bold text-gray-800 mb-6 text-shadow">
+                探索学术世界
+            </h1>
+            <p class="text-[clamp(1rem,2vw,1.25rem)] text-gray-600 mb-12 max-w-2xl mx-auto">
+                快速检索海量学术文献，发现前沿研究成果，助力你的学术之旅
+            </p>
+
+            <!-- 大搜索框 -->
+            <div class="bg-white rounded-2xl shadow-xl p-2 max-w-3xl mx-auto">
+                <form action="/search" method="get" class="flex items-center">
+                    <input
+                        type="text"
+                        name="keyword"
+                        placeholder="输入关键词、标题或作者..."
+                        class="flex-1 px-6 py-4 text-lg rounded-l-xl focus:outline-none"
+                        required
+                    >
+                    <select name="search_type" class="px-4 py-4 text-gray-600 border-l border-gray-200 focus:outline-none">
+                        <option value="title">标题</option>
+                        <option value="author">作者</option>
+                        <option value="category">分类</option>
+                        <option value="keyword">关键词</option>
+                    </select>
+                    <button type="submit" class="bg-primary text-white px-8 py-4 rounded-r-xl hover:bg-secondary transition-colors">
+                        <i class="fa fa-search mr-2"></i>检索
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 功能卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                    <i class="fa fa-search text-primary text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">多维度检索</h3>
+                <p class="text-gray-600">支持标题、作者、分类、关键词等多种检索方式，精准定位目标文献</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                    <i class="fa fa-bar-chart text-green-600 text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">数据统计</h3>
+                <p class="text-gray-600">查看热门关键词、活跃用户、高被引文献等统计数据，了解研究趋势</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                    <i class="fa fa-link text-purple-600 text-xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">引文分析</h3>
+                <p class="text-gray-600">查看文献引用关系，追踪研究脉络，发现领域内的重要成果</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

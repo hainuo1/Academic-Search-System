@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mx-auto p-6">
+
+    <div class="bg-white rounded-xl shadow-lg p-6">
+
+        <h2 class="text-2xl font-bold mb-4">
+
+            设置引用关系
+
+        </h2>
+
+        <div class="bg-blue-50 p-4 rounded mb-6">
+
+            当前文献：
+
+            <strong>
+
+                {{ current_doc.Title }}
+
+            </strong>
+
+        </div>
+
+        <div class="mb-4">
+
+            <input
+                type="text"
+                id="keyword"
+                placeholder="输入标题搜索文献"
+                class="border rounded p-2 w-full"
+            >
+
+        </div>
+
+        <button
+            onclick="searchDocument()"
+            class="bg-blue-600 text-white px-4 py-2 rounded"
+        >
+            搜索文献
+        </button>
+
+        <form
+            method="post"
+            action="/save_citation/{{ current_doc.DocumentID }}"
+        >
+
+            <div
+                id="resultArea"
+                class="mt-6"
+            >
+            </div>
+
+            <button
+                type="submit"
+                class="mt-6 bg-green-600 text-white px-6 py-2 rounded"
+            >
+                保存引用关系
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+
+function searchDocument(){
+
+    let keyword =
+        document.getElementById(
+            "keyword"
+        ).value
+
+    fetch(
+        `/search_citation?keyword=${keyword}&doc_id={{ current_doc.DocumentID }}`
+    )
+
+    .then(response=>response.json())
+
+    .then(data=>{
+
+        let html=""
+
+        data.forEach(doc=>{
+
+            let checked=""
+
+            let selected =
+            {{ selected_ids|tojson }}
+
+            if(
+                selected.includes(
+                    doc.DocumentID
+                )
+            ){
+                checked="checked"
+            }
+
+            html += `
+            <div class="border p-3 rounded mb-2">
+
+                <label>
+
+                    <input
+                        type="checkbox"
+                        name="target_doc_ids"
+                        value="${doc.DocumentID}"
+                        ${checked}
+                    >
+
+                    <strong>
+
+                        ${doc.Title}
+
+                    </strong>
+
+                    - ${doc.Author}
+
+                </label>
+
+            </div>
+            `
+        })
+
+        document.getElementById(
+            "resultArea"
+        ).innerHTML = html
+
+    })
+
+}
+
+</script>
+
+{% endblock %}
