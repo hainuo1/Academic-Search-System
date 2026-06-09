@@ -1,0 +1,43 @@
+# Python 通用忽略
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# 虚拟环境
+venv/
+env/
+ENV/
+
+# IDE 配置
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 上传的PDF文件（绝对不能上传）
+uploads/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 日志文件
+*.log
