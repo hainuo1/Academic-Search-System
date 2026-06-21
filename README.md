@@ -1,13 +1,13 @@
 
+
 # 📚 AcademicSearchSystem —— 学术文献检索系统
 
 > 基于 Flask + SQL Server 的轻量级学术文献管理平台  
 > 南京农业大学 · 信息与计算科学专业 · 毕业设计
 
-![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
+![Python|92](https://img.shields.io/badge/Python-3.10+-blue.svg)
 ![Flask](https://img.shields.io/badge/Flask-3.1.3-green.svg)
 ![SQL Server](https://img.shields.io/badge/SQL%20Server-2019-red.svg)
-![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 ---
 
@@ -57,6 +57,11 @@ AcademicSearchSystem
 ├── captcha.py                # 图形验证码生成工具
 ├── utils.py                  # 公共工具函数（关键词处理、分页计算）
 ├── requirements.txt          # 项目依赖清单
+├── 项目各文件说明.md           # 项目文件功能详解文档
+│
+├── database/                 # 数据库脚本与设计文档
+│   ├── 数据库设计.md          # 完整数据库设计文档（E-R图、表结构、约束）
+│   └── 数据库表创建.sql       # 建表脚本（10张表，含主键/外键/唯一约束）
 │
 ├── routes/                   # 蓝图模块（MVC 中的 Controller）
 │   ├── auth.py               # 用户认证（登录 / 注册 / 找回密码）
@@ -98,11 +103,7 @@ AcademicSearchSystem
 │       ├── search.js         # 搜索页交互
 │       └── upload.js         # 上传页（日期选择 + 防重复提交）
 │
-├── uploads/                  # 上传的 PDF 文件存储目录（自动创建）
-│
-└── database/                 # 数据库脚本（建议新建）
-    ├── AcademicSearchDB表创建.sql
-    └── AcademicSearchDB数据库表的设计.md
+└── uploads/                  # 上传的 PDF 文件存储目录（自动创建）
 ```
 
 ---
@@ -111,7 +112,7 @@ AcademicSearchSystem
 
 ### 核心数据表
 
-系统共包含 **11 张数据表**，设计遵循第三范式（3NF），确保数据一致性与完整性。
+系统共包含 **10 张数据表**，设计遵循第三范式（3NF），确保数据一致性与完整性。
 
 | 表名 | 说明 |
 | :--- | :--- |
@@ -128,16 +129,95 @@ AcademicSearchSystem
 
 ### 表结构关系图
 
-```text
-Users ──────┐
-            ├── SearchHistory
-            ├── BrowseHistory
-            ├── Favorites ──── Documents
-            └── DocumentKeyword ──── Keywords
-                    │
-Documents ──────────┼── Citation (Source)
-                    │
-                    └── Citation (Target)
+```mermaid
+Users ||--o{ Documents : "上传"
+Users ||--o{ Favorites : "收藏"
+Users ||--o{ BrowseHistory : "浏览"
+Users ||--o{ SearchHistory : "检索"
+Users ||--o{ UserSearchCount : "统计"
+
+Documents ||--o{ DocumentKeyword : "包含"
+Keywords ||--o{ DocumentKeyword : "关联"
+
+Documents ||--o{ Citation : "来源引用"
+Documents ||--o{ Citation : "目标被引"
+
+Users {
+    int UserID PK
+    string UserName UK
+    string Password
+    string Email UK
+    string Question1
+    string Answer1Hash
+    string Question2
+    string Answer2Hash
+    int FailedAttempts
+    datetime LockoutUntil
+    datetime RegisterTime
+}
+
+Documents {
+    int DocumentID PK
+    string Title
+    string Author
+    string Abstract
+    date PublishDate
+    string Category
+    string FilePath
+    int UploadUserID FK
+    datetime UploadTime
+    int ViewCount
+    int DownloadCount
+    string KeywordsText
+    string FullText
+}
+
+Keywords {
+    int KeywordID PK
+    string KeywordName UK
+}
+
+DocumentKeyword {
+    int DocumentID PK,FK
+    int KeywordID PK,FK
+    float TF_IDF
+}
+
+Citation {
+    int SourceDocumentID PK,FK
+    int TargetDocumentID PK,FK
+}
+
+Favorites {
+    int FavoriteID PK
+    int UserID FK
+    int DocumentID FK
+    datetime CreateTime
+}
+
+BrowseHistory {
+    int HistoryID PK
+    int UserID FK
+    int DocumentID FK
+    datetime ViewTime
+}
+
+SearchHistory {
+    int HistoryID PK
+    int UserID FK
+    string SearchKeyword
+    datetime SearchTime
+}
+
+UserSearchCount {
+    int UserID PK,FK
+    int SearchCount
+}
+
+KeywordSearchCount {
+    string Keyword PK
+    int SearchCount
+}
 ```
 
 ### 关键约束
@@ -150,25 +230,28 @@ Documents ──────────┼── Citation (Source)
   - `Keywords.KeywordName`（关键词唯一）
   - `Citation(SourceDocumentID, TargetDocumentID)`（引用关系唯一，禁止重复）
   - `Favorites(UserID, DocumentID)`（每个用户对同一文献只能收藏一次）
-- **检查约束**：
-  - 禁止自引用（`SourceDocumentID != TargetDocumentID`）
-  - `TF-IDF >= 0`
 
-### 索引设计
+> **注**：当前版本暂未添加 `CHECK` 约束（如禁止自引用、TF-IDF 非负），由应用层代码保证数据一致性。生产环境如需强制校验，可自行添加。
 
-为提升检索性能，在以下字段上建立了索引：
+### 索引建议（提升检索性能）
 
-```text
-IX_Documents_Title            -- 标题检索加速
-IX_Documents_Author           -- 作者检索加速
-IX_Keywords_Name              -- 关键词名称唯一性查询
-IX_DocumentKeyword_KeywordID  -- 关键词关联查询加速
-IX_SearchHistory_UserID       -- 用户历史查询加速
-IX_BrowseHistory_UserID       -- 用户浏览历史查询加速
-IX_Citation_Source            -- 引用来源查询加速
-IX_Citation_Target            -- 被引用查询（高被引统计）加速
-IX_Favorites_UserID           -- 用户收藏查询加速
-IX_Favorites_DocumentID       -- 文献收藏数统计加速
+以下索引为性能优化建议，当前版本暂未在建表脚本中强制创建，可根据实际数据量按需添加：
+
+```sql
+-- 提升标题/作者/分类检索速度
+CREATE INDEX IX_Documents_Title ON Documents(Title);
+CREATE INDEX IX_Documents_Author ON Documents(Author);
+CREATE INDEX IX_Documents_Category ON Documents(Category);
+CREATE INDEX IX_Documents_PublishDate ON Documents(PublishDate);
+
+-- 提升全文检索速度（需启用 SQL Server 全文索引）
+-- CREATE FULLTEXT CATALOG ftCatalog AS DEFAULT;
+-- CREATE FULLTEXT INDEX ON Documents(FullText) KEY INDEX PK_Documents;
+
+-- 提升外键关联查询效率
+CREATE INDEX IX_Documents_UploadUserID ON Documents(UploadUserID);
+CREATE INDEX IX_Favorites_UserID ON Favorites(UserID);
+CREATE INDEX IX_BrowseHistory_UserID ON BrowseHistory(UserID);
 ```
 
 ---
@@ -214,7 +297,7 @@ pip install -r requirements.txt
 ### 3. 配置数据库
 
 - 修改 `config.py` 中的 `DB_CONNECTION_STRING`，指向你的 SQL Server 实例。
-- 在 SQL Server 中执行 `AcademicSearchDB表创建.sql`，自动创建数据库及所有表结构。
+- 在 SQL Server 中执行 `database/数据库表创建.sql`，自动创建数据库及所有表结构。
 
 **Windows 身份验证示例：**
 
@@ -238,6 +321,8 @@ DB_CONNECTION_STRING = (
     'PWD=your_password;'
 )
 ```
+
+> **提示**：如果你的 SQL Server 实例名称不是 `localhost`，请替换为实际的服务器名称（如 `destiny`）或 IP 地址。
 
 ### 4. 启动应用
 
@@ -292,9 +377,32 @@ python app.py
 
 ---
 
-## 📄 许可证
+## 📄 版权与使用声明
 
-本项目仅供学习交流使用，未经作者授权不得用于商业用途。
+**版权所有 © 2026 丁俊杰（南京农业大学）**
+
+本系统为南京农业大学信息与计算科学专业毕业设计作品，受《中华人民共和国著作权法》保护。
+
+### 您被允许：
+- ✅ **查看**：浏览、阅读本项目源代码及文档
+- ✅ **转载**：在保留完整版权声明及原作者信息的前提下，转载本项目文档或代码片段
+- ✅ **学习参考**：将本项目作为学习 Flask、数据库设计、Web 开发的参考资料
+
+### 您被禁止：
+- ❌ **商业使用**：不得将本系统或其任何部分用于商业目的
+- ❌ **修改后发布**：不得对本项目进行修改、改编后以自己名义重新发布或提交
+- ❌ **抄袭冒用**：严禁将本系统的设计思路、代码结构、界面布局等稍作修改后冒充为自己的原创作品，尤其在毕业设计、课程项目等学术场景中
+
+### 学术诚信特别声明
+
+> 本系统为作者独立完成的毕业设计作品。任何个人或组织若参考本项目进行毕业设计、课程项目或其他学术用途，**必须在参考文献或致谢中明确标注本项目的出处**，严禁整体或部分抄袭后作为自己的成果提交。
+
+**转载时请注明出处**：
+- GitHub 仓库：https://github.com/hainuo1/AcademicSearchSystem
+- 作者：丁俊杰（hainuo1）
+- 学校：南京农业大学 · 信息与计算科学专业
+
+如需获得商业授权或合作使用，请联系作者：hainuo@stu.njau.edu.cn
 
 ---
 
