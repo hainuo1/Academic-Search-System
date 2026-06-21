@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}编辑文献 - 学术文献检索系统{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-12">
+    <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 p-8">
+        <h2 class="text-2xl font-bold mb-6 ml-1">编辑文献</h2>
+
+        {% if error %}
+        <div class="mb-6 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg flex items-center">
+            <i class="fa fa-exclamation-circle mr-2"></i>
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="post" action="{{ url_for('document.edit_document', doc_id=doc.DocumentID) }}">
+            <!-- 标题 -->
+            <div class="mb-6 form-item">
+                <label class="block mb-2 font-medium text-gray-700">
+                    标题 <span class="text-red-500">*</span>
+                </label>
+                <input type="text" name="title" value="{{ doc.Title }}" required
+                       class="w-full border border-gray-300 rounded-lg p-3 input-focus">
+            </div>
+
+            <!-- 作者 -->
+            <div class="mb-6 form-item">
+                <label class="block mb-2 font-medium text-gray-700">
+                    作者 <span class="text-red-500">*</span>
+                </label>
+                <input type="text" name="author" value="{{ doc.Author }}" required
+                       class="w-full border border-gray-300 rounded-lg p-3 input-focus">
+            </div>
+
+            <!-- 分类 -->
+            <div class="mb-6 form-item">
+                <label class="block mb-2 font-medium text-gray-700">
+                    分类 <span class="text-red-500">*</span>
+                </label>
+                <input type="text" name="category" value="{{ doc.Category }}" placeholder="例如：人工智能、数据库、信息检索" required
+                       class="w-full border border-gray-300 rounded-lg p-3 input-focus">
+            </div>
+
+            <!-- 发表日期 -->
+            <div class="mb-6 form-item">
+                <label class="block mb-2 font-medium text-gray-700">
+                    发表日期 <span class="text-red-500">*</span>
+                </label>
+                <input type="date" name="publish_date" value="{{ doc.PublishDate }}" required
+                       class="w-full border border-gray-300 rounded-lg p-3 input-focus">
+            </div>
+
+            <!-- 关键词 -->
+            <div class="mb-6 form-item">
+                <label class="block mb-2 font-medium text-gray-700">
+                    关键词 <span class="text-red-500">*</span>
+                </label>
+                <input type="text" name="keywords" value="{{ doc.KeywordsText }}" placeholder="例如：AI;机器学习;知识图谱" required
+                       class="w-full border border-gray-300 rounded-lg p-3 input-focus">
+                <p class="text-gray-500 text-sm mt-1">多个关键词用分号分隔</p>
+            </div>
+
+            <!-- 摘要 -->
+            <div class="mb-8 form-item">
+                <label class="block mb-2 font-medium text-gray-700">
+                    摘要 <span class="text-red-500">*</span>
+                </label>
+                <textarea name="abstract" rows="6" required
+                          class="w-full border border-gray-300 rounded-lg p-3 input-focus">{{ doc.Abstract }}</textarea>
+            </div>
+
+            <!-- 提交按钮 -->
+            <div class="flex gap-4">
+                <button type="submit"
+                        class="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-lg font-medium transition-all shadow-md hover:shadow-lg flex items-center justify-center">
+                    <i class="fa fa-save mr-2"></i>
+                    保存修改
+                </button>
+                <a href="{{ url_for('document.my_documents') }}"
+                   class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-8 py-3 rounded-lg font-medium transition-all">
+                    取消
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<!-- 编辑页无需额外 JS，所有功能由 base.html 引入的 app.js 提供 -->
+{% endblock %}

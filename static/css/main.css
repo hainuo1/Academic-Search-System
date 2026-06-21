@@ -1,0 +1,194 @@
+/* ============================================================
+   static/css/main.css —— 全局样式文件
+
+   作用：把原来散落在各个 HTML 页面 <style> 标签里的 CSS
+   全部集中到这一个文件里统一管理。
+
+   什么是 CSS？
+   CSS 负责控制页面的"长相"：颜色、字体、间距、动画等。
+   HTML 是骨架，CSS 是外观。
+
+   文件结构：
+   1. 全局通用样式（所有页面共享）
+   2. 历史记录页专用样式
+   3. 个人信息页专用样式
+   4. 首页专用样式
+   5. 上传页专用样式
+============================================================ */
+
+
+/* ============================================================
+   1. 全局通用样式
+   这些样式在所有页面都会生效
+============================================================ */
+
+/* 按钮悬停动效：鼠标移上去时轻微放大 + 出现蓝色阴影 */
+.btn-hover {
+    transition: all 0.2s ease;
+}
+.btn-hover:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(22, 93, 255, 0.3);
+}
+
+/* 搜索结果关键词高亮样式
+   当 JS 把关键词用 <mark class="search-highlight"> 包裹后，
+   这里控制高亮的颜色和样式 */
+.search-highlight {
+    background-color: #fff3cd;
+    color: #d97706;
+    font-weight: bold;
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+
+/* ============================================================
+   2. 历史记录页专用样式
+============================================================ */
+
+/* 历史记录列表项：鼠标移上去时向右滑动 + 左侧出现蓝色渐变背景 */
+.history-item {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.history-item:hover {
+    transform: translateX(8px);
+    background: linear-gradient(
+        90deg,
+        rgba(22, 93, 255, 0.05) 0%,
+        rgba(255, 255, 255, 0) 100%
+    );
+}
+
+/* 空状态图标的漂浮动画：上下缓慢浮动，循环播放 */
+.empty-illustration {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* 定义 float 动画的关键帧
+   0% 和 100% 在原位，50% 向上移动 10px */
+@keyframes float {
+    0%,
+    100% { transform: translateY(0px); }
+    50%  { transform: translateY(-10px); }
+}
+
+
+/* ============================================================
+   3. 个人信息页专用样式
+============================================================ */
+
+/* 表单卡片：鼠标移上去时出现蓝色阴影，有"浮起"的感觉 */
+.form-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.form-card:hover {
+    box-shadow: 0 8px 24px rgba(22, 93, 255, 0.1);
+}
+
+/* 输入框聚焦样式：点击输入框时出现蓝色外发光圈 */
+.input-focus:focus {
+    outline: none;
+    border-color: #165DFF;
+    box-shadow: 0 0 0 3px rgba(22, 93, 255, 0.15);
+}
+
+
+/* ============================================================
+   4. 首页专用样式
+============================================================ */
+
+/* 首页大标题：文字阴影，让标题更立体 */
+.text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 功能介绍卡片：鼠标移上去时向上浮起 */
+.card-hover {
+    transition: all 0.3s ease;
+}
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px -5px rgba(22, 93, 255, 0.1);
+}
+
+
+/* ============================================================
+   5. 上传页专用样式
+============================================================ */
+
+/* 表单每一项：鼠标移上去时轻微右移 */
+.form-item {
+    transition: all 0.2s ease;
+}
+.form-item:hover {
+    transform: translateX(2px);
+}
+/* 滚动出现动画 */
+.animate-on-scroll {
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards;
+}
+.animate-on-scroll:nth-child(1) { animation-delay: 0.1s; }
+.animate-on-scroll:nth-child(2) { animation-delay: 0.25s; }
+.animate-on-scroll:nth-child(3) { animation-delay: 0.4s; }
+.animate-on-scroll:nth-child(4) { animation-delay: 0.55s; }
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================================
+   index.html 页面专属样式 —— 首页动画
+============================================================ */
+
+/* ---------- 渐变背景动画 ---------- */
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+.animate-gradient {
+    background-size: 300% 300%;
+    animation: gradient 12s ease infinite;
+}
+
+/* ---------- 浮动圆装饰 ---------- */
+@keyframes float-slow {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(20px, -30px) scale(1.1); }
+    66% { transform: translate(-15px, 20px) scale(0.9); }
+}
+.animate-float-slow { animation: float-slow 20s ease-in-out infinite; }
+.animate-float-delay { animation: float-slow 25s ease-in-out infinite 3s; }
+.animate-float-slower { animation: float-slow 30s ease-in-out infinite 6s; }
+
+/* ---------- 滚动出现动画 ---------- */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.animate-on-scroll {
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards;
+}
+.animate-on-scroll:nth-child(1) { animation-delay: 0.1s; }
+.animate-on-scroll:nth-child(2) { animation-delay: 0.25s; }
+.animate-on-scroll:nth-child(3) { animation-delay: 0.4s; }
+.animate-on-scroll:nth-child(4) { animation-delay: 0.55s; }
+
+/* ---------- 底部跳动指示器 ---------- */
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+.animate-bounce {
+    animation: bounce 2s ease-in-out infinite;
+}

@@ -1,139 +1,107 @@
 {% extends "base.html" %}
-{% block title %}
-上传文献
-{% endblock %}
-{% block extra_head %}
-<style type="text/tailwindcss">
-    @layer utilities {
-        .content-auto {
-            content-visibility: auto;
-        }
-        .form-item {
-            transition: all 0.2s ease;
-        }
-        .form-item:hover {
-            transform: translateX(2px);
-        }
-        .input-focus {
-            @apply focus:ring-2 focus:ring-primary/30 focus:border-primary outline-none transition-all;
-        }
-    }
-</style>
-{% endblock %}
+
+{% block title %}上传文献 - 学术文献检索系统{% endblock %}
+
 {% block content %}
-<div class="max-w-4xl mx-auto px-4 py-12">
-<div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 p-8">
-    <!-- 标题添加了左边距，实现和下方文字首行对齐 -->
-    <h2 class="text-2xl font-bold mb-6 ml-1">
-        上传文献
-    </h2>
-    <form method="post"
-          enctype="multipart/form-data">
-        <div class="mb-6 form-item">
-            <label class="block mb-2 font-medium text-gray-700">
-                PDF文件 <span class="text-red-500">*</span>
-            </label>
-            <input type="file"
-                   name="pdf_file"
-                   accept=".pdf"
-                   required
-                   class="w-full border border-gray-300 rounded-lg p-3 input-focus">
-            <p class="text-gray-500 text-sm mt-1">支持PDF格式，单个文件最大50MB</p>
-        </div>
-        <div class="mb-6 form-item">
-            <label class="block mb-2 font-medium text-gray-700">
-                标题 <span class="text-red-500">*</span>
-            </label>
-            <input type="text"
-                   name="title"
-                   required
-                   class="w-full border border-gray-300 rounded-lg p-3 input-focus">
-        </div>
-        <div class="mb-6 form-item">
-            <label class="block mb-2 font-medium text-gray-700">
-                作者 <span class="text-red-500">*</span>
-            </label>
-            <input type="text"
-                   name="author"
-                   required
-                   class="w-full border border-gray-300 rounded-lg p-3 input-focus">
-        </div>
-        <div class="mb-6 form-item">
-            <label class="block mb-2 font-medium text-gray-700">
-                分类 <span class="text-red-500">*</span>
-            </label>
-            <input type="text"
-                   name="category"
-                   placeholder="例如：人工智能、数据库、信息检索"
-                   required
-                   class="w-full border border-gray-300 rounded-lg p-3 input-focus">
-        </div>
-        <!-- 日期选择功能，完全保留 -->
-        <div class="mb-6 form-item">
-            <label class="block mb-2 font-medium text-gray-700">
-                发表日期 <span class="text-red-500">*</span>
-            </label>
-            <div class="relative">
-                <input type="text"
-                       id="date_display"
-                       placeholder="点击选择发表日期"
-                       readonly
-                       class="w-full border border-gray-300 rounded-lg p-3 pr-10 input-focus cursor-pointer">
-                <input type="date"
-                       name="publish_date"
-                       id="date_input"
-                       required
-                       class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                <i class="fa fa-calendar absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+<div class="max-w-4xl mx-auto px-4 py-8">
+    <!-- ====== 统一顶部标题 ====== -->
+    <div class="mb-8">
+        <div class="flex items-center mb-2">
+            <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mr-3 shadow-md">
+                <i class="fa fa-upload text-white text-lg"></i>
             </div>
-            <p class="text-gray-500 text-sm mt-1">点击输入框即可弹出日历选择日期</p>
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">上传文献</h1>
+                <p class="text-gray-500 text-sm">上传PDF文献，系统将自动提取全文用于检索</p>
+            </div>
         </div>
-        <div class="mb-6 form-item">
-            <label class="block mb-2 font-medium text-gray-700">
-                关键词 <span class="text-red-500">*</span>
-            </label>
-            <input type="text"
-                   name="keywords"
-                   placeholder="例如：AI;机器学习;知识图谱"
-                   required
-                   class="w-full border border-gray-300 rounded-lg p-3 input-focus">
-            <p class="text-gray-500 text-sm mt-1">多个关键词用分号分隔</p>
+    </div>
+
+    <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 p-8">
+        {% if error %}
+        <div class="mb-6 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg flex items-center text-sm">
+            <i class="fa fa-exclamation-circle mr-2"></i>
+            {{ error }}
         </div>
-        <div class="mb-8 form-item">
-            <label class="block mb-2 font-medium text-gray-700">
-                摘要 <span class="text-red-500">*</span>
-            </label>
-            <textarea
-                name="abstract"
-                rows="6"
-                required
-                class="w-full border border-gray-300 rounded-lg p-3 input-focus"></textarea>
-        </div>
-        <button
-            type="submit"
-            class="w-full md:w-auto bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-lg font-medium transition-all shadow-md hover:shadow-lg flex items-center justify-center">
-            <i class="fa fa-upload mr-2"></i>
-            上传文献
-        </button>
-    </form>
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data" action="{{ url_for('document.upload') }}">
+            <!-- PDF文件 -->
+            <div class="mb-6 form-item">
+                <label class="block mb-2 font-medium text-gray-700 text-sm">
+                    PDF文件 <span class="text-red-500">*</span>
+                </label>
+                <input type="file" name="pdf_file" accept=".pdf" required
+                       class="w-full border border-gray-300 rounded-lg p-3 input-focus text-sm">
+                <p class="text-gray-500 text-xs mt-1">支持PDF格式，单个文件最大50MB</p>
+            </div>
+
+            <!-- 标题 -->
+            <div class="mb-6 form-item">
+                <label class="block mb-2 font-medium text-gray-700 text-sm">
+                    标题 <span class="text-red-500">*</span>
+                </label>
+                <input type="text" name="title" required
+                       class="w-full border border-gray-300 rounded-lg p-3 input-focus text-sm">
+            </div>
+
+            <!-- 作者 -->
+            <div class="mb-6 form-item">
+                <label class="block mb-2 font-medium text-gray-700 text-sm">
+                    作者 <span class="text-red-500">*</span>
+                </label>
+                <input type="text" name="author" required
+                       class="w-full border border-gray-300 rounded-lg p-3 input-focus text-sm">
+            </div>
+
+            <!-- 分类 -->
+            <div class="mb-6 form-item">
+                <label class="block mb-2 font-medium text-gray-700 text-sm">
+                    分类 <span class="text-red-500">*</span>
+                </label>
+                <input type="text" name="category" placeholder="例如：人工智能、数据库、信息检索" required
+                       class="w-full border border-gray-300 rounded-lg p-3 input-focus text-sm">
+            </div>
+
+            <!-- 发表日期 -->
+            <div class="mb-6 form-item">
+                <label class="block mb-2 font-medium text-gray-700 text-sm">
+                    发表日期 <span class="text-red-500">*</span>
+                </label>
+                <input type="date" name="publish_date" required
+                       class="w-full border border-gray-300 rounded-lg p-3 input-focus text-sm">
+                <p class="text-gray-500 text-xs mt-1">选择发表日期</p>
+            </div>
+
+            <!-- 关键词 -->
+            <div class="mb-6 form-item">
+                <label class="block mb-2 font-medium text-gray-700 text-sm">
+                    关键词 <span class="text-red-500">*</span>
+                </label>
+                <input type="text" name="keywords" placeholder="例如：AI;机器学习;知识图谱" required
+                       class="w-full border border-gray-300 rounded-lg p-3 input-focus text-sm">
+                <p class="text-gray-500 text-xs mt-1">多个关键词用分号分隔</p>
+            </div>
+
+            <!-- 摘要 -->
+            <div class="mb-8 form-item">
+                <label class="block mb-2 font-medium text-gray-700 text-sm">
+                    摘要 <span class="text-red-500">*</span>
+                </label>
+                <textarea name="abstract" rows="6" required
+                          class="w-full border border-gray-300 rounded-lg p-3 input-focus text-sm"></textarea>
+            </div>
+
+            <button type="submit"
+                    class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-all shadow-md hover:shadow-lg flex items-center justify-center text-sm">
+                <i class="fa fa-upload mr-2"></i>
+                上传文献
+            </button>
+        </form>
+    </div>
 </div>
-</div>
-<script>
-// 日期选择的同步逻辑，完全保留
-const dateInput = document.getElementById('date_input');
-const dateDisplay = document.getElementById('date_display');
-dateInput.addEventListener('change', function() {
-    if (this.value) {
-        dateDisplay.value = this.value;
-    }
-});
-</script>
-<script>
-// 上传加载状态，完全保留
-document.querySelector('form[enctype="multipart/form-data"]').addEventListener('submit', function() {
-    const submitBtn = this.querySelector('button[type="submit"]');
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin mr-2"></i>上传中...';
-});
-</script>
+{% endblock %}
+
+{% block extra_script %}
+<!-- 无额外 JS -->
 {% endblock %}

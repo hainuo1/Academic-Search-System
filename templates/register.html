@@ -3,114 +3,251 @@
 {% block title %}注册 - 学术文献检索系统{% endblock %}
 
 {% block content %}
-<div class="bg-gradient-to-br from-blue-50 to-indigo-50 min-h-screen flex items-center justify-center py-12 px-4">
-    <div class="max-w-md w-full bg-white rounded-2xl shadow-2xl overflow-hidden">
-        <div class="bg-primary text-white p-8 text-center">
-            <i class="fa fa-user-plus text-4xl mb-4"></i>
-            <h2 class="text-2xl font-bold">创建新账户</h2>
-            <p class="text-blue-100 mt-2">加入学术文献检索系统</p>
-        </div>
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4">
+    <div class="w-full max-w-6xl bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row">
 
-        <div class="p-8">
-            {% if error %}
-            <div class="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6 flex items-center">
-                <i class="fa fa-exclamation-circle mr-2"></i>
-                {{ error }}
+        <!-- ============================================================
+             左栏：全新分层设计
+             上层（登录页风格）：大标题 + 简介
+             中层（时间线内容）：白色背景卡片，承载简史，确保清晰度
+             下层（功能亮点）：与登录页完全一致
+        ============================================================ -->
+        <div class="w-full md:w-2/5 bg-gradient-to-br from-blue-700 via-indigo-700 to-purple-800 p-8 md:p-10 flex flex-col justify-between relative overflow-hidden min-h-[520px] md:min-h-0">
+
+            <!-- 装饰元素 -->
+            <div class="absolute -top-20 -right-20 w-64 h-64 bg-white/5 rounded-full blur-2xl"></div>
+            <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-white/5 rounded-full blur-2xl"></div>
+
+            <div class="relative z-10 flex-1 flex flex-col">
+                <!-- ====== 上部：品牌 + 欢迎语（与登录页风格一致，字体大、清晰） ====== -->
+                <div class="flex-shrink-0">
+                    <div class="flex items-center gap-3 text-white mb-6">
+                        <i class="fa fa-book text-2xl"></i>
+                        <span class="text-xl font-bold tracking-wide text-white/90">学术文献检索</span>
+                    </div>
+                    <h2 class="text-3xl font-bold text-white leading-tight">
+                        加入我们 🚀
+                    </h2>
+                    <p class="text-blue-200 text-base mt-2 leading-relaxed max-w-xs">
+                        注册后即可免费检索海量文献、收藏重要成果、追踪研究趋势。
+                    </p>
+                </div>
+
+                <!-- ====== 中部：时间线卡片（白色背景，清晰易读） ====== -->
+                <div class="flex-1 flex items-center py-4">
+                    <div class="w-full bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/10">
+                        <!-- 卡片标题 -->
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-white/50 text-[11px] tracking-[0.15em] uppercase">演进简史</span>
+                            <span class="flex-1 border-t border-white/10"></span>
+                            <span class="text-white/30 text-[10px]">从竹简到云端</span>
+                        </div>
+
+                        <!-- 时间线内容（白色文字，对比度大幅提升） -->
+                        <div class="grid grid-cols-[52px_1fr] gap-x-3 gap-y-1.5 text-sm">
+                            <!-- 古代 -->
+                            <div class="text-yellow-300/70 text-[13px] font-mono font-bold text-right pt-0.5">古代</div>
+                            <div>
+                                <p class="text-white/95 text-[16px] font-medium leading-tight">目录学萌芽</p>
+                                <p class="text-white/60 text-[13px] leading-relaxed">刘向《别录》开创中国古典目录学传统</p>
+                            </div>
+
+                            <!-- 15世纪 -->
+                            <div class="text-yellow-300/70 text-[13px] font-mono font-bold text-right pt-0.5">15世纪</div>
+                            <div>
+                                <p class="text-white/95 text-[16px] font-medium leading-tight">印刷术革命</p>
+                                <p class="text-white/60 text-[13px] leading-relaxed">古登堡印刷术推动知识大规模复制传播</p>
+                            </div>
+
+                            <!-- 1876年 -->
+                            <div class="text-yellow-300/70 text-[13px] font-mono font-bold text-right pt-0.5">1876年</div>
+                            <div>
+                                <p class="text-white/95 text-[16px] font-medium leading-tight">分类法诞生</p>
+                                <p class="text-white/60 text-[13px] leading-relaxed">杜威十进分类法奠定现代文献组织体系</p>
+                            </div>
+
+                            <!-- 1895年 -->
+                            <div class="text-yellow-300/70 text-[13px] font-mono font-bold text-right pt-0.5">1895年</div>
+                            <div>
+                                <p class="text-white/95 text-[16px] font-medium leading-tight">文摘索引诞生</p>
+                                <p class="text-white/60 text-[13px] leading-relaxed">《科学文摘》创刊，开启系统化学术索引</p>
+                            </div>
+
+                            <!-- 1945年 -->
+                            <div class="text-yellow-300/70 text-[13px] font-mono font-bold text-right pt-0.5">1945年</div>
+                            <div>
+                                <p class="text-white/95 text-[16px] font-medium leading-tight">信息科学先驱</p>
+                                <p class="text-white/60 text-[13px] leading-relaxed">Vannevar Bush 预见信息检索未来</p>
+                            </div>
+
+                            <!-- 1960年代 -->
+                            <div class="text-yellow-300/70 text-[13px] font-mono font-bold text-right pt-0.5">1960年代</div>
+                            <div>
+                                <p class="text-white/95 text-[16px] font-medium leading-tight">计算机检索革命</p>
+                                <p class="text-white/60 text-[13px] leading-relaxed">MEDLINE系统问世，检索进入自动化时代</p>
+                            </div>
+
+                            <!-- 1990年代 -->
+                            <div class="text-yellow-300/70 text-[13px] font-mono font-bold text-right pt-0.5">1990年代</div>
+                            <div>
+                                <p class="text-white/95 text-[16px] font-medium leading-tight">互联网检索兴起</p>
+                                <p class="text-white/60 text-[13px] leading-relaxed">搜索引擎普及，学术资源全球互联</p>
+                            </div>
+
+                            <!-- 今日 -->
+                            <div class="text-yellow-300/70 text-[13px] font-mono font-bold text-right pt-0.5">今日</div>
+                            <div>
+                                <p class="text-white/95 text-[16px] font-medium leading-tight">智能学术检索</p>
+                                <p class="text-white/60 text-[13px] leading-relaxed">AI驱动、知识图谱赋能学术探索新高度</p>
+                            </div>
+                        </div>
+
+                        <!-- 结语 -->
+                        <p class="text-white/30 text-[12px] italic mt-3 pt-2 border-t border-white/10 text-center tracking-wide">
+                            “知识的历史，就是人类不断寻找、组织与传承的历史”
+                        </p>
+                    </div>
+                </div>
             </div>
-            {% endif %}
 
-            <form action="/register" method="post">
-                <div class="mb-6">
-                    <label class="block text-gray-700 font-medium mb-2" for="username">
-                        用户名
-                    </label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-                            <i class="fa fa-user"></i>
-                        </span>
-                        <input
-                            type="text"
-                            id="username"
-                            name="username"
-                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                            placeholder="请输入用户名（2-20个字符）"
-                            required
-                        >
+            <!-- ====== 下部：功能亮点（与登录页完全一致） ====== -->
+            <div class="relative z-10 flex-shrink-0">
+                <div class="grid grid-cols-3 gap-2 pt-3 border-t border-white/10">
+                    <div class="text-center">
+                        <i class="fa fa-search text-xl text-yellow-300 block mb-0.5"></i>
+                        <span class="text-[12px] text-blue-200">智能检索</span>
+                    </div>
+                    <div class="text-center">
+                        <i class="fa fa-star text-xl text-yellow-300 block mb-0.5"></i>
+                        <span class="text-[12px] text-blue-200">收藏管理</span>
+                    </div>
+                    <div class="text-center">
+                        <i class="fa fa-link text-xl text-yellow-300 block mb-0.5"></i>
+                        <span class="text-[12px] text-blue-200">引用分析</span>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="mb-6">
-                    <label class="block text-gray-700 font-medium mb-2" for="email">
-                        邮箱
-                    </label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-                            <i class="fa fa-envelope"></i>
-                        </span>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                            placeholder="请输入您的邮箱"
-                            required
-                        >
-                    </div>
+        <!-- ============================================================
+             右栏：注册表单（保持不变）
+        ============================================================ -->
+        <div class="w-full md:w-3/5 p-8 md:p-12 flex items-center justify-center">
+            <div class="w-full max-w-md">
+                <div class="md:hidden text-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">创建账户</h2>
+                    <p class="text-gray-500 text-sm">填写信息，立即加入学术社区</p>
                 </div>
 
-                <div class="mb-6">
-                    <label class="block text-gray-700 font-medium mb-2" for="password">
-                        密码
-                    </label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-                            <i class="fa fa-lock"></i>
-                        </span>
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                            placeholder="请输入密码（8-50个字符，不含空格）"
-                            required
-                        >
-                    </div>
+                {% if error %}
+                <div class="mb-5 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl flex items-center text-sm">
+                    <i class="fa fa-exclamation-circle mr-2"></i>
+                    {{ error }}
                 </div>
+                {% endif %}
 
-                <div class="mb-6">
-    <label class="block text-gray-700 font-medium mb-2" for="confirm_password">
-        确认密码
-    </label>
+                <form action="{{ url_for('auth.register') }}" method="post">
+                    <div class="mb-3">
+                        <label class="block text-sm font-medium text-gray-700 mb-1" for="username">
+                            用户名 <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="username" name="username"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl input-focus text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+                               placeholder="2-20个字符，字母、数字或中文" required>
+                    </div>
 
-    <div class="relative">
-        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-            <i class="fa fa-lock"></i>
-        </span>
+                    <div class="mb-3">
+                        <label class="block text-sm font-medium text-gray-700 mb-1" for="email">
+                            邮箱 <span class="text-red-500">*</span>
+                        </label>
+                        <input type="email" id="email" name="email"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl input-focus text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+                               placeholder="请输入您的邮箱地址" required>
+                    </div>
 
-        <input
-            type="password"
-            id="confirm_password"
-            name="confirm_password"
-            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-            placeholder="请再次输入密码"
-            required
-        >
-    </div>
-</div>
+                    <div class="mb-3">
+                        <label class="block text-sm font-medium text-gray-700 mb-1" for="password">
+                            密码 <span class="text-red-500">*</span>
+                        </label>
+                        <input type="password" id="password" name="password"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl input-focus text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+                               placeholder="8-50个字符，不含空格" required>
+                    </div>
 
-                <button
-                    type="submit"
-                    class="w-full bg-primary text-white py-3 rounded-lg font-medium hover:bg-secondary transition-colors mb-4"
-                >
-                    注册
-                </button>
+                    <div class="mb-3">
+                        <label class="block text-sm font-medium text-gray-700 mb-1" for="confirm_password">
+                            确认密码 <span class="text-red-500">*</span>
+                        </label>
+                        <input type="password" id="confirm_password" name="confirm_password"
+                               class="w-full px-4 py-2.5 border border-gray-200 rounded-xl input-focus text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+                               placeholder="请再次输入密码" required>
+                    </div>
 
-                <div class="text-center text-gray-600">
+                    <!-- 安全问题 -->
+                    <div class="border-t border-gray-100 pt-3 mt-2">
+                        <p class="text-sm font-medium text-gray-700 mb-2">
+                            <i class="fa fa-shield mr-1.5 text-blue-500"></i>安全问题
+                            <span class="text-red-500">*</span>
+                            <span class="text-xs text-gray-400 font-normal ml-1">（用于找回密码）</span>
+                        </p>
+
+                        <div class="mb-2">
+                            <label class="block text-xs font-medium text-gray-600 mb-0.5" for="question1">
+                                安全问题 1 <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" id="question1" name="question1"
+                                   class="w-full px-4 py-2 border border-gray-200 rounded-lg input-focus text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+                                   placeholder="例如：您母亲的姓名是？" required>
+                        </div>
+                        <div class="mb-2">
+                            <label class="block text-xs font-medium text-gray-600 mb-0.5" for="answer1">
+                                答案 1 <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" id="answer1" name="answer1"
+                                   class="w-full px-4 py-2 border border-gray-200 rounded-lg input-focus text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+                                   placeholder="请输入答案" required>
+                        </div>
+
+                        <div class="mb-2">
+                            <label class="block text-xs font-medium text-gray-600 mb-0.5" for="question2">
+                                安全问题 2 <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" id="question2" name="question2"
+                                   class="w-full px-4 py-2 border border-gray-200 rounded-lg input-focus text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+                                   placeholder="例如：您的小学名称是？" required>
+                        </div>
+                        <div class="mb-1">
+                            <label class="block text-xs font-medium text-gray-600 mb-0.5" for="answer2">
+                                答案 2 <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" id="answer2" name="answer2"
+                                   class="w-full px-4 py-2 border border-gray-200 rounded-lg input-focus text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition"
+                                   placeholder="请输入答案" required>
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium transition-all shadow-md hover:shadow-lg text-sm mt-3">
+                        <i class="fa fa-user-plus mr-2"></i>注 册
+                    </button>
+                </form>
+
+                <div class="mt-5 text-center text-sm text-gray-500">
                     已有账户？
-                    <a href="/login" class="text-primary hover:underline">立即登录</a>
+                    <a href="{{ url_for('auth.login') }}" class="text-blue-600 hover:text-blue-800 font-medium hover:underline">
+                        立即登录 →
+                    </a>
                 </div>
-            </form>
+
+                <div class="mt-8 text-center text-[11px] text-gray-400 border-t border-gray-100 pt-5">
+                    南京农业大学 · 信息与计算科学专业 · 丁俊杰 制作
+                </div>
+            </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_script %}
+<!-- 注册页无需额外 JS -->
 {% endblock %}
