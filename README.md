@@ -130,94 +130,95 @@ AcademicSearchSystem
 ### 表结构关系图
 
 ```mermaid
-Users ||--o{ Documents : "上传"
-Users ||--o{ Favorites : "收藏"
-Users ||--o{ BrowseHistory : "浏览"
-Users ||--o{ SearchHistory : "检索"
-Users ||--o{ UserSearchCount : "统计"
+erDiagram
+    Users ||--o{ Documents : "上传"
+    Users ||--o{ Favorites : "收藏"
+    Users ||--o{ BrowseHistory : "浏览"
+    Users ||--o{ SearchHistory : "检索"
+    Users ||--o{ UserSearchCount : "统计"
 
-Documents ||--o{ DocumentKeyword : "包含"
-Keywords ||--o{ DocumentKeyword : "关联"
+    Documents ||--o{ DocumentKeyword : "包含"
+    Keywords ||--o{ DocumentKeyword : "关联"
 
-Documents ||--o{ Citation : "来源引用"
-Documents ||--o{ Citation : "目标被引"
+    Documents ||--o{ Citation : "来源引用"
+    Documents ||--o{ Citation : "目标被引"
 
-Users {
-    int UserID PK
-    string UserName UK
-    string Password
-    string Email UK
-    string Question1
-    string Answer1Hash
-    string Question2
-    string Answer2Hash
-    int FailedAttempts
-    datetime LockoutUntil
-    datetime RegisterTime
-}
+    Users {
+        int UserID PK
+        string UserName UK
+        string Password
+        string Email UK
+        string Question1
+        string Answer1Hash
+        string Question2
+        string Answer2Hash
+        int FailedAttempts
+        datetime LockoutUntil
+        datetime RegisterTime
+    }
 
-Documents {
-    int DocumentID PK
-    string Title
-    string Author
-    string Abstract
-    date PublishDate
-    string Category
-    string FilePath
-    int UploadUserID FK
-    datetime UploadTime
-    int ViewCount
-    int DownloadCount
-    string KeywordsText
-    string FullText
-}
+    Documents {
+        int DocumentID PK
+        string Title
+        string Author
+        string Abstract
+        date PublishDate
+        string Category
+        string FilePath
+        int UploadUserID FK
+        datetime UploadTime
+        int ViewCount
+        int DownloadCount
+        string KeywordsText
+        string FullText
+    }
 
-Keywords {
-    int KeywordID PK
-    string KeywordName UK
-}
+    Keywords {
+        int KeywordID PK
+        string KeywordName UK
+    }
 
-DocumentKeyword {
-    int DocumentID PK,FK
-    int KeywordID PK,FK
-    float TF_IDF
-}
+    DocumentKeyword {
+        int DocumentID PK,FK
+        int KeywordID PK,FK
+        float TF_IDF
+    }
 
-Citation {
-    int SourceDocumentID PK,FK
-    int TargetDocumentID PK,FK
-}
+    Citation {
+        int SourceDocumentID PK,FK
+        int TargetDocumentID PK,FK
+    }
 
-Favorites {
-    int FavoriteID PK
-    int UserID FK
-    int DocumentID FK
-    datetime CreateTime
-}
+    Favorites {
+        int FavoriteID PK
+        int UserID FK
+        int DocumentID FK
+        datetime CreateTime
+    }
 
-BrowseHistory {
-    int HistoryID PK
-    int UserID FK
-    int DocumentID FK
-    datetime ViewTime
-}
+    BrowseHistory {
+        int HistoryID PK
+        int UserID FK
+        int DocumentID FK
+        datetime ViewTime
+    }
 
-SearchHistory {
-    int HistoryID PK
-    int UserID FK
-    string SearchKeyword
-    datetime SearchTime
-}
+    SearchHistory {
+        int HistoryID PK
+        int UserID FK
+        string SearchKeyword
+        datetime SearchTime
+    }
 
-UserSearchCount {
-    int UserID PK,FK
-    int SearchCount
-}
+    UserSearchCount {
+        int UserID PK,FK
+        int SearchCount
+    }
 
-KeywordSearchCount {
-    string Keyword PK
-    int SearchCount
-}
+    KeywordSearchCount {
+        string Keyword PK
+        int SearchCount
+    }
 ```
 
 ### 关键约束
