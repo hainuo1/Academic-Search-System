@@ -1,3 +1,4 @@
+
 # AcademicSearchSystem
 
 基于 Flask + SQL Server 构建的学术文献检索系统。
@@ -8,29 +9,29 @@
 
 ---
 
-# Project Overview
+# 项目概述
 
-Academic Literature Retrieval System is a web-based academic document management and retrieval platform developed using:
+学术文献检索系统是一个基于 Web 的学术文献管理与检索平台，使用以下技术栈开发：
 
-* Python Flask
-* Microsoft SQL Server
-* HTML / CSS / JavaScript
-* pyodbc
+- Python Flask
+- Microsoft SQL Server
+- HTML / CSS / JavaScript
+- pyodbc
 
-The system supports:
+系统支持的功能包括：
 
-* Document Upload
-* Metadata Management
-* Keyword Retrieval
-* TF-IDF Ranking
-* Citation Relationship Construction
-* Favorites Management
-* Search History Recording
-* Statistical Analysis
+- 文献上传
+- 元数据管理
+- 关键词检索
+- TF-IDF 排序
+- 引用关系构建
+- 收藏管理
+- 检索历史记录
+- 统计分析
 
 ---
 
-# System Architecture
+# 系统架构
 
 ```text
 AcademicSearchSystem
@@ -65,56 +66,56 @@ AcademicSearchSystem
 
 ---
 
-# Main Features
+# 主要功能
 
-## 1. User Management
+## 1. 用户管理
 
-* User Registration
-* User Login
-* Password Recovery
-* Personal Information Management
-* Email Modification
-* Password Modification
-
----
-
-## 2. Document Management
-
-* Upload PDF Documents
-* View Document Details
-* Download Documents
-* Delete Personal Documents
-
-Supported Metadata:
-
-* Title
-* Author
-* Abstract
-* Category
-* Publish Date
-* Keywords
+- 用户注册
+- 用户登录
+- 密码找回
+- 个人信息管理
+- 邮箱修改
+- 密码修改
 
 ---
 
-## 3. Literature Retrieval
+## 2. 文献管理
 
-Supports multiple retrieval modes:
+- 上传 PDF 文档
+- 查看文献详情
+- 下载文献
+- 删除个人文献
 
-### Title Search
+支持的元数据字段：
 
-Search by document title.
+- 标题
+- 作者
+- 摘要
+- 分类
+- 发表日期
+- 关键词
 
-### Author Search
+---
 
-Search by author name.
+## 3. 文献检索
 
-### Category Search
+支持多种检索模式：
 
-Search by literature category.
+### 标题检索
 
-### Keyword Search
+按文献标题进行检索。
 
-Based on:
+### 作者检索
+
+按作者姓名进行检索。
+
+### 分类检索
+
+按文献分类进行检索。
+
+### 关键词检索
+
+基于以下数据关系：
 
 ```text
 Documents
@@ -124,95 +125,95 @@ DocumentKeyword
 Keywords
 ```
 
-Combined with TF-IDF weighting to sort results by relevance.
+结合 TF-IDF 权重对检索结果按相关度排序。
 
-### Advanced Search
+### 高级检索
 
-Supports combined filtering by:
+支持多条件组合筛选：
 
-* Title
-* Author
-* Category
-* Keyword
-* Start Date
-* End Date
-
----
-
-## 4. Citation Management
-
-Users can create citation relationships between documents.
-
-Functions:
-
-* Citation Search
-* Citation Selection
-* Citation Cancellation
-* Citation Count Statistics
-
-Constraints:
-
-* No Self-Citation
-* No Duplicate Citation
+- 标题
+- 作者
+- 分类
+- 关键词
+- 起始日期
+- 结束日期
 
 ---
 
-## 5. Favorites Management
+## 4. 引用管理
 
-* Add Favorites
-* Remove Favorites
-* AJAX Asynchronous Update
-* Pagination Display
+用户可在文献之间创建引用关系。
 
----
+功能包括：
 
-## 6. Search History
+- 引用搜索
+- 引用选择
+- 取消引用
+- 引用次数统计
 
-The system automatically records:
+约束规则：
 
-* User
-* Search Keyword
-* Search Time
-
-Features:
-
-* Automatic Cleanup after 100 Records
-* Pagination Management
+- 禁止自引用
+- 禁止重复引用
 
 ---
 
-## 7. Statistical Analysis
+## 5. 收藏管理
 
-* Popular Search Keywords
-* Active Users Ranking
-* Most Cited Documents
-
----
-
-# Database Design
-
-## Core Tables
-
-| Table Name      | Description                |
-| --------------- | -------------------------- |
-| Users           | User Information           |
-| Documents       | Literature Information     |
-| Keywords        | Keywords                   |
-| DocumentKeyword | Literature-Keyword Mapping |
-| SearchHistory   | Search History             |
-| Citation        | Citation Relationship      |
-| Favorites       | User Favorites             |
+- 添加收藏
+- 取消收藏
+- AJAX 异步更新
+- 分页展示
 
 ---
 
-## Key Constraints
+## 6. 检索历史
 
-* Primary Keys
-* Foreign Keys
-* Unique Constraints
-* Check Constraints
+系统自动记录：
 
-Including:
+- 用户
+- 检索关键词
+- 检索时间
+
+特性：
+
+- 自动清理超出 100 条的记录
+- 分页管理
+
+---
+
+## 7. 统计分析
+
+- 热门检索关键词
+- 活跃用户排行
+- 高被引文献排行
+
+---
+
+# 数据库设计
+
+## 核心数据表
+
+| 表名 | 说明 |
+| --- | --- |
+| Users | 用户信息表 |
+| Documents | 文献信息表 |
+| Keywords | 关键词表 |
+| DocumentKeyword | 文献-关键词映射表 |
+| SearchHistory | 检索历史记录表 |
+| Citation | 引用关系表 |
+| Favorites | 用户收藏表 |
+
+---
+
+## 关键约束
+
+- 主键约束
+- 外键约束
+- 唯一约束
+- 检查约束
+
+涉及字段：
 
 ```text
 UserName
@@ -222,18 +223,18 @@ KeywordName
 (UserID, DocumentID)
 ```
 
-Additional Constraints:
+其他约束：
 
 ```text
-No Self-Citation
+禁止自引用
 TF-IDF >= 0
-Password Length Validation
-Email Format Validation
+密码长度校验
+邮箱格式校验
 ```
 
 ---
 
-## Index Design
+## 索引设计
 
 ```text
 IX_Documents_Title
@@ -247,11 +248,11 @@ IX_Favorites_UserID
 IX_Favorites_DocumentID
 ```
 
-Indexes improve retrieval performance for large-scale document collections.
+索引用于提升大规模文献集合下的检索性能。
 
 ---
 
-# Environment Requirements
+# 环境要求
 
 ## Python
 
@@ -259,7 +260,7 @@ Indexes improve retrieval performance for large-scale document collections.
 Python 3.11+
 ```
 
-## Database
+## 数据库
 
 ```text
 Microsoft SQL Server
@@ -267,9 +268,9 @@ Microsoft SQL Server
 
 ---
 
-# Installation
+# 安装步骤
 
-Install dependencies:
+安装依赖：
 
 ```bash
 pip install -r requirements.txt
@@ -277,34 +278,41 @@ pip install -r requirements.txt
 
 ---
 
-# Deployment
+# 部署指南
 
-## Step 1: Initialize Database
+## 第一步：初始化数据库
 
-Execute:
+执行 SQL 脚本：
 
 ```text
 AcademicSearchDB表创建.sql
 ```
 
-This script automatically creates:
+该脚本将自动完成以下操作：
 
-* Database AcademicSearchDB
-* All Tables
-* Constraints
-* Indexes
+- 创建数据库 AcademicSearchDB
+- 创建所有数据表
+- 创建约束
+- 创建索引
 
 ---
 
-## Step 2: Configure Database Connection
+## 第二步：配置数据库连接
 
-Modify the connection string in:
+修改 `app.py` 中的数据库连接字符串。
+
+示例配置（Windows 身份验证）：
 
 ```python
-app.py
+conn = pyodbc.connect(
+    'DRIVER={SQL Server};'
+    'SERVER=YOUR_SERVER_NAME;'
+    'DATABASE=AcademicSearchDB;'
+    'Trusted_Connection=yes;'
+)
 ```
 
-Example:
+示例配置（SQL Server 身份验证）：
 
 ```python
 conn = pyodbc.connect(
@@ -318,13 +326,13 @@ conn = pyodbc.connect(
 
 ---
 
-## Step 3: Run Application
+## 第三步：运行应用
 
 ```bash
 python app.py
 ```
 
-Open browser:
+在浏览器中打开：
 
 ```text
 http://127.0.0.1:5000
@@ -332,41 +340,39 @@ http://127.0.0.1:5000
 
 ---
 
-# Current Version
+# 当前版本
 
 ```text
-Version: v1.0 Freeze Release
+版本号：v1.0 Freeze Release
 ```
 
-Status:
+状态：
 
 ```text
-All Core Functions Implemented
-System Tested Successfully
-Project Archived for Graduation Design
+所有核心功能已实现
+系统测试通过
+项目已归档，用于毕业设计
 ```
 
 ---
 
-# Future Improvements
+# 后续改进方向
 
-Potential future work:
+未来可扩展的方向：
 
-* Elasticsearch Full-Text Retrieval
-* PDF Content Parsing
-* Automatic TF-IDF Calculation
-* Recommendation Algorithms
-* Knowledge Graph Construction
-* Administrator Backend
-* Role-Based Access Control (RBAC)
+- Elasticsearch 全文检索
+- PDF 内容自动解析
+- TF-IDF 自动增量计算
+- 推荐算法
+- 知识图谱构建
+- 管理员后台
+- 基于角色的访问控制（RBAC）
 
 ---
 
-# License
+# 许可证
 
-This project is currently maintained as an academic graduation project repository.
-
-License information can be found in:
+本项目为学术毕业设计仓库，许可证信息详见：
 
 ```text
 LICENSE
@@ -374,14 +380,14 @@ LICENSE
 
 ---
 
-# Author
+# 作者
 
-Academic Literature Retrieval System
+学术文献检索系统
 
-Developed with:
+使用以下技术构建：
 
-* Flask
-* SQL Server
-* HTML / CSS / JavaScript
+- Flask
+- SQL Server
+- HTML / CSS / JavaScript
 
-For Academic Information Retrieval and Database System Practice.
+用于学术信息检索与数据库系统课程实践。
