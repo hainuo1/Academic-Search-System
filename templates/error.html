@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}系统提示 - 学术文献检索系统{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto py-20 px-6">
+    <div class="bg-white shadow-lg rounded-xl p-10 text-center">
+        <i class="fa fa-exclamation-circle text-red-500 text-6xl mb-6"></i>
+        <h1 class="text-3xl font-bold mb-4">系统提示</h1>
+        <p class="text-gray-600 text-lg mb-8">{{ message }}</p>
+        <div class="space-x-4">
+            <a href="{{ url_for('auth.home') }}"
+               class="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 transition">
+                返回首页
+            </a>
+            <a href="javascript:history.back()"
+               class="bg-gray-500 text-white px-5 py-2 rounded hover:bg-gray-600 transition">
+                返回上一页
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<!-- error.html 无专属 JS -->
+{% endblock %}
