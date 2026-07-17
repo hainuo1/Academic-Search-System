@@ -1,3 +1,7 @@
-".venv/" 
-"uploads/" 
-"__pycache__/" 
+node_modules/
+__pycache__/
+*.pyc
+uploads/
+.venv/
+.env
+.DS_Store

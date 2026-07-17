@@ -1,400 +1,167 @@
+# 📚 AcademicSearchSystem 4.0 —— 学术文献检索系统
 
-
-
-# 📚 AcademicSearchSystem —— 学术文献检索系统
-
-> 基于 Flask + MySQL 的轻量级学术文献管理平台  
+> 基于 Vue 3 + Flask + MySQL 的前后端分离学术文献管理平台
 > 南京农业大学 · 信息与计算科学专业 · 毕业设计
 
-![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
-![Flask](https://img.shields.io/badge/Flask-3.1.3-green.svg)
-![MySQL](https://img.shields.io/badge/MySQL-8.0-orange.svg)
+![Vue](https://img.shields.io/badge/Vue-3.5-green.svg)  ![Flask](https://img.shields.io/badge/Flask-3.1-blue.svg)  ![MySQL](https://img.shields.io/badge/MySQL-8.0-orange.svg)
 
 ---
 
 ## 📖 项目概述
 
-学术文献检索系统是一个基于 Web 的学术文献管理与检索平台，旨在为科研人员、高校师生提供便捷的文献检索与管理工具。系统采用 Flask 轻量级 Web 框架构建，后端使用 MySQL 关系型数据库存储数据，前端采用 Tailwind CSS 实现现代化响应式界面。
+学术文献检索系统是一个基于 Web 的学术文献管理与检索平台，4.0 版本在架构上彻底升级为**前后端分离**架构——前端使用 Vue 3 + Vite 构建 SPA 单页应用，后端使用 Flask 提供 REST API 纯数据服务，前后端通过 HTTP + JSON 通信，JWT 无状态认证。
 
-系统支持文献上传、多维度检索、引用关系管理、收藏管理、历史记录追踪、数据统计分析等核心功能，可作为信息检索、数据库系统、Web 开发等课程的综合实践项目。
+系统支持文献上传、多维度检索、引用关系管理、收藏管理、历史记录追踪、数据统计分析等核心功能。
 
 ---
 
 ## ✨ 核心功能
 
-| 模块          | 功能描述                                         |
-| :---------- | :------------------------------------------- |
-| 🔐 **用户认证** | 注册 / 登录 / 密码找回（安全问题 + 图形验证码），登录失败锁定机制        |
-| 🔍 **智能检索** | 支持标题、作者、分类、关键词、**全文** 五种检索方式，并支持高级筛选（日期、分类等） |
-| 📄 **文献管理** | 上传 PDF（自动提取全文）、下载、编辑、删除，个人文献库管理              |
-| ⭐ **收藏系统**  | 一键收藏 / 取消收藏，我的收藏分页展示                         |
-| 🔗 **引用关系** | 为文献添加引用关系，查看被引次数，追踪学术脉络                      |
-| 📊 **数据统计** | 热门关键词、活跃用户、高被引文献、浏览次数 / 下载次数 / 收藏排行          |
-| 🕒 **历史记录** | 检索历史 + 浏览历史，面板独立分页，支持清空和快速重新搜索                |
-| 👤 **个人中心** | 修改邮箱 / 密码 / 安全问题（需验证当前密码）                    |
+| 模块 | 功能描述 |
+|:---|:---|
+| 🏠 **欢迎首页** | 系统介绍 + 功能卡片 + 登录/注册入口，无需登录即可浏览 |
+| 🔐 **用户认证** | 注册 / 登录 / 密码找回（安全问题 + 图形验证码），JWT 无状态认证，登录失败锁定机制 |
+| 🔍 **智能检索** | 5 种检索方式 + 高级筛选（日期/分类）+ 分类浏览，搜索关键词高亮 |
+| 📄 **文献管理** | 上传 PDF（自动提取全文）、下载、编辑、删除，个人文献库 |
+| ⭐ **收藏系统** | 一键收藏/取消收藏，收藏列表分页 |
+| 🔗 **引用分析** | 设置文献引用关系，搜索可引用文献，查看引用网络 |
+| 📊 **数据统计** | 6 类 TOP10 排行：热门关键词、活跃用户、高被引、高浏览、高下载、高收藏 |
+| 📝 **历史记录** | 检索历史 + 浏览历史，支持点击关键词重新搜索 |
 
 ---
 
-## 🛠️ 技术栈
+## 🏗️ 技术架构
 
-- **后端框架**：Flask 3.1.3 + PyMySQL
-- **前端框架**：Tailwind CSS + Font Awesome + 原生 JavaScript
-- **数据库**：MySQL 8.0（utf8mb4 字符集，InnoDB 引擎）
-- **PDF 解析**：pdfplumber（自动提取全文用于检索）
-- **验证码生成**：Pillow（图形验证码）
-- **密码加密**：Werkzeug Security（PBKDF2 哈希）
-- **部署环境**：支持 Windows 本地部署，可迁移至 Linux
-
----
-
-## 📁 系统架构
-
-```text
-AcademicSearchSystem
-│
-├── app.py                    # 程序入口，创建 Flask 应用
-├── config.py                 # 配置文件（数据库连接、密钥、上传路径）
-├── db.py                     # 数据库连接管理（请求级连接，自动关闭）
-├── captcha.py                # 图形验证码生成工具
-├── utils.py                  # 公共工具函数（关键词处理、分页计算）
-├── requirements.txt          # 项目依赖清单
-├── 项目各文件说明.md           # 项目文件功能详解文档
-├── 数据库设计.md              # 完整数据库设计文档（E-R图、表结构、约束）
-│
-├── routes/                   # 蓝图模块（MVC 中的 Controller）
-│   ├── auth.py               # 用户认证（登录 / 注册 / 找回密码）
-│   ├── document.py           # 文献操作（上传 / 下载 / 编辑 / 删除）
-│   ├── search.py             # 检索功能 + 历史记录管理
-│   ├── citation.py           # 引用关系管理
-│   ├── favorites.py          # 收藏功能
-│   ├── profile.py            # 个人信息管理
-│   └── stats.py              # 数据统计分析
-│
-├── templates/                # HTML 模板（MVC 中的 View）
-│   ├── base.html             # 基础模板（导航栏 + 页脚）
-│   ├── index.html            # 首页（打字机效果 + 功能介绍）
-│   ├── login.html            # 登录页面
-│   ├── register.html         # 注册页面
-│   ├── forgot_password.html  # 找回密码页面
-│   ├── search.html           # 检索页面（含高级筛选）
-│   ├── document.html         # 文献详情页面
-│   ├── upload.html           # 上传文献页面
-│   ├── edit_document.html    # 编辑文献页面
-│   ├── my_documents.html     # 我的文献列表
-│   ├── favorites.html        # 我的收藏列表
-│   ├── citation.html         # 设置引用关系页面
-│   ├── history.html          # 历史记录页面
-│   ├── profile.html          # 个人信息页面
-│   ├── stats.html            # 数据统计页面
-│   └── error.html            # 错误提示页面
-│
-├── static/                   # 静态资源
-│   ├── css/
-│   │   └── main.css          # 全局样式（含动画、交互效果）
-│   └── js/
-│       ├── app.js            # 全局 JS（折叠面板控制）
-│       ├── captcha.js        # 验证码刷新交互
-│       ├── citation.js       # 引用文献搜索
-│       ├── document.js       # 收藏切换（异步 AJAX）
-│       ├── favorites.js      # 取消收藏
-│       ├── index.js          # 首页打字机效果
-│       ├── search.js         # 搜索页交互
-│       └── upload.js         # 上传页（防重复提交）
-│
-└── uploads/                  # 上传的 PDF 文件存储目录（自动创建）
+```
+浏览器 (localhost:5173)
+    ↓
+Vite 开发服务器 → Vue 3 SPA
+    ↓ axios + JWT Token (Authorization Header)
+Flask API Server (localhost:5000)
+    ↓ PyMySQL
+MySQL 数据库 (localhost:3306)
 ```
 
+| 层级 | 技术 | 说明 |
+|:---|:---|:---|
+| 前端框架 | Vue 3（Composition API） | `<script setup>` 语法，单文件组件（SFC） |
+| 前端构建 | Vite 6 | 开发服务器 (5173)，热更新，生产打包 |
+| 前端路由 | Vue Router 4 | 15 个路由，前端路由守卫 |
+| 状态管理 | Pinia 2 | auth（用户状态）+ flash（消息提示） |
+| HTTP 客户端 | axios | 请求拦截自动带 Token，响应拦截 401 自动跳转 |
+| CSS | Tailwind CSS（CDN） | 实用优先样式框架 |
+| 后端框架 | Flask 3.x | Blueprint 模块化路由，仅返回 JSON |
+| 数据库 | MySQL 8.0 | PyMySQL 驱动，utf8mb4 |
+| 认证 | JWT（PyJWT） | 24h 过期，@login_required 装饰器 |
+| 跨域 | flask-cors | 允许 localhost:5173 → 5000 |
+| 一键启动 | AutoHotkey v2 | 双击启动前后端 + 打开浏览器 |
+
 ---
 
-## 🗄️ 数据库设计
+## 🚀 快速开始
 
-### 核心数据表
+### 环境要求
 
-系统共包含 **10 张数据表**，设计遵循第三范式（3NF），确保数据一致性与完整性。
+| 组件 | 版本 |
+|:---|:---|
+| Python | 3.10+ |
+| Node.js | 18+ (LTS) |
+| npm | 9+ |
+| MySQL | 8.0+ |
+| AutoHotkey | v2.0（一键启动需要） |
 
-| 表名 | 说明 |
-| :--- | :--- |
-| **Users** | 用户信息表，存储账号、密码哈希、邮箱、安全问题与答案 |
-| **Documents** | 文献信息表，存储标题、作者、摘要、分类、发表日期、文件路径、全文内容 |
-| **Keywords** | 关键词表，存储所有关键词（去重） |
-| **DocumentKeyword** | 文献-关键词映射表，建立文献与关键词的多对多关系，存储 TF-IDF 权重 |
-| **SearchHistory** | 检索历史记录表，记录用户每次检索的关键词与时间 |
-| **BrowseHistory** | 浏览历史记录表，记录用户每次查看的文献与时间 |
-| **Citation** | 引用关系表，存储文献之间的引用网络（源文献 → 目标文献） |
-| **Favorites** | 收藏表，记录用户收藏的文献 |
-| **KeywordSearchCount** | 关键词搜索统计表，记录每个关键词被搜索的总次数（用于热门关键词排行） |
-| **UserSearchCount** | 用户搜索统计表，记录每个用户的搜索总次数（用于活跃用户排行） |
-
-### 表结构关系图
-
-```mermaid
-erDiagram
-    Users ||--o{ Documents : "上传"
-    Users ||--o{ Favorites : "收藏"
-    Users ||--o{ BrowseHistory : "浏览"
-    Users ||--o{ SearchHistory : "检索"
-    Users ||--o{ UserSearchCount : "统计"
-
-    Documents ||--o{ DocumentKeyword : "包含"
-    Keywords ||--o{ DocumentKeyword : "关联"
-
-    Documents ||--o{ Citation : "来源引用"
-    Documents ||--o{ Citation : "目标被引"
-
-    Users {
-        int UserID PK
-        varchar UserName UK
-        varchar Password
-        varchar Email UK
-        varchar Question1
-        varchar Answer1Hash
-        varchar Question2
-        varchar Answer2Hash
-        int FailedAttempts
-        datetime LockoutUntil
-        datetime RegisterTime
-    }
-
-    Documents {
-        int DocumentID PK
-        varchar Title
-        varchar Author
-        text Abstract
-        date PublishDate
-        varchar Category
-        varchar FilePath
-        int UploadUserID FK
-        datetime UploadTime
-        int ViewCount
-        int DownloadCount
-        varchar KeywordsText
-        mediumtext FullText
-    }
-
-    Keywords {
-        int KeywordID PK
-        varchar KeywordName UK
-    }
-
-    DocumentKeyword {
-        int DocumentID PK,FK
-        int KeywordID PK,FK
-        float TF_IDF
-    }
-
-    Citation {
-        int SourceDocumentID PK,FK
-        int TargetDocumentID PK,FK
-    }
-
-    Favorites {
-        int FavoriteID PK
-        int UserID FK
-        int DocumentID FK
-        datetime CreateTime
-    }
-
-    BrowseHistory {
-        int HistoryID PK
-        int UserID FK
-        int DocumentID FK
-        datetime ViewTime
-    }
-
-    SearchHistory {
-        int HistoryID PK
-        int UserID FK
-        varchar SearchKeyword
-        datetime SearchTime
-    }
-
-    UserSearchCount {
-        int UserID PK,FK
-        int SearchCount
-    }
-
-    KeywordSearchCount {
-        varchar Keyword PK
-        int SearchCount
-    }
-```
-
-### 关键约束
-
-- **主键约束**：每张表均设有自增主键（`AUTO_INCREMENT`）
-- **外键约束**：确保引用完整性（如 `Favorites.UserID` → `Users.UserID`）
-- **唯一约束**：
-  - `Users.UserName`（用户名唯一）
-  - `Users.Email`（邮箱唯一）
-  - `Keywords.KeywordName`（关键词唯一）
-  - `Citation(SourceDocumentID, TargetDocumentID)`（引用关系唯一，禁止重复）
-  - `Favorites(UserID, DocumentID)`（每个用户对同一文献只能收藏一次）
-
-> **注**：当前版本暂未添加 `CHECK` 约束（如禁止自引用、TF-IDF 非负），由应用层代码保证数据一致性。生产环境如需强制校验，可自行添加。
-
-### 索引建议（提升检索性能）
-
-以下索引为性能优化建议，当前版本暂未在建表脚本中强制创建，可根据实际数据量按需添加：
+### 数据库初始化
 
 ```sql
--- 提升标题/作者/分类检索速度
-CREATE INDEX IX_Documents_Title ON Documents(Title);
-CREATE INDEX IX_Documents_Author ON Documents(Author);
-CREATE INDEX IX_Documents_Category ON Documents(Category);
-CREATE INDEX IX_Documents_PublishDate ON Documents(PublishDate);
-
--- 提升全文检索速度（MySQL 全文索引）
-ALTER TABLE Documents ADD FULLTEXT INDEX ft_fulltext (FullText);
-
--- 提升外键关联查询效率
-CREATE INDEX IX_Documents_UploadUserID ON Documents(UploadUserID);
-CREATE INDEX IX_Favorites_UserID ON Favorites(UserID);
-CREATE INDEX IX_BrowseHistory_UserID ON BrowseHistory(UserID);
+CREATE DATABASE AcademicSearchDB CHARACTER SET utf8mb4;
 ```
 
----
+然后运行项目附带的 `数据库设计.md` 中的建表 SQL，或在 MySQL 客户端中执行。
 
-## 🔧 环境要求
-
-### Python
-
-```text
-Python 3.10 或更高版本
-```
-
-### 数据库
-
-```text
-MySQL 8.0 或更高版本（兼容 MySQL 5.7+）
-```
-
-### 操作系统
-
-```text
-Windows 10/11（开发环境）
-Linux / macOS（可迁移部署）
-```
-
----
-
-## 📦 快速开始
-
-### 1. 克隆仓库
-
+修改 `backend/config.py` 中的数据库密码，或设置环境变量：
 ```bash
-git clone https://github.com/hainuo1/AcademicSearchSystem.git
-cd AcademicSearchSystem
+set DB_PASSWORD=你的密码    # Windows
+export DB_PASSWORD="你的密码"  # macOS / Linux
 ```
 
-### 2. 安装依赖
+### 方式一：AutoHotkey 一键启动（推荐）
 
+双击 `启动检索系统.ahk` → 自动启动后端 → 启动前端 → 打开浏览器。
+
+### 方式二：手动启动
+
+**后端：**
 ```bash
+cd backend
 pip install -r requirements.txt
+python app.py          # http://localhost:5000
 ```
 
-### 3. 配置数据库
-
-- 在 MySQL 中创建数据库 `AcademicSearchDB`，字符集选择 `utf8mb4`。
-- 参考 `数据库设计.md` 中的建表 SQL 创建所有表结构。
-- 修改 `config.py` 中的 `DB_CONFIG`，填写你的 MySQL 连接信息：
-
-```python
-DB_CONFIG = {
-    'host': 'localhost',
-    'port': 3306,
-    'user': 'root',
-    'password': '你的密码',        # 生产环境建议通过环境变量 DB_PASSWORD 设置
-    'database': 'AcademicSearchDB',
-    'charset': 'utf8mb4',
-    'autocommit': False,
-}
-```
-
-> **提示**：密码支持通过环境变量 `DB_PASSWORD` 设置，避免硬编码泄露。如未设置环境变量则使用默认值。
-
-### 4. 启动应用
-
+**前端：**
 ```bash
-python app.py
+cd frontend
+npm install            # 首次运行
+npm run dev            # http://localhost:5173
 ```
 
-访问 `http://127.0.0.1:5000` 即可使用系统。
+浏览器访问 `http://localhost:5173/welcome`
 
 ---
 
-## 📌 分支说明
+## 📂 项目结构
 
-- **`v3.0.0`**：当前最新版本，已从 SQL Server 重构至 MySQL（PyMySQL），修复所有已知 Bug，文档同步更新。
-- **`v2.0`**：SQL Server 旧版本（通过 pyodbc 连接）。
-- **`v1.0`**：旧版本存档，保留原始代码与设计文档，便于回溯对比。
+```
+检索系统4.0/
+├── README.md
+├── requirements.txt           # Python 后端依赖
+├── .gitignore
+├── 启动检索系统.ahk            # AutoHotkey 一键启动
+├── 项目各文件说明.md            # 文件结构 + 模块说明
+├── 数据库设计.md               # ER 图 + 10 张表结构 + 约束
+│
+├── backend/                   # Flask API 后端
+│   ├── app.py                 #   入口：创建应用、注册蓝图、配置 CORS
+│   ├── config.py              #   配置：密钥、数据库、上传限制
+│   ├── db.py                  #   数据库层：连接管理 + Row 封装
+│   ├── utils.py               #   工具箱：JWT、分页、@login_required
+│   ├── captcha.py             #   图形验证码
+│   ├── requirements.txt
+│   ├── uploads/               #   PDF 存储
+│   └── routes/                #   7 个蓝图路由
+│       ├── auth.py            #     认证（登录/注册/找回密码）
+│       ├── search.py          #     检索 + 历史
+│       ├── document.py        #     文献 CRUD
+│       ├── favorites.py       #     收藏
+│       ├── citation.py        #     引用关系
+│       ├── profile.py         #     个人信息
+│       └── stats.py           #     统计排行
+│
+└── frontend/                  # Vue 3 前端
+    ├── index.html             #   浏览器入口
+    ├── package.json           #   前端依赖
+    ├── vite.config.js         #   Vite 配置
+    └── src/
+        ├── main.js            #   Vue 启动器
+        ├── App.vue            #   根组件（导航栏 + 页脚）
+        ├── api/index.js       #   axios 实例 + 拦截器
+        ├── router/index.js    #   路由表 + 守卫
+        ├── stores/            #   Pinia 状态管理
+        └── views/             #   15 个页面组件
+```
+
+---
+
+## 🔗 配套文档
+
+本项目的开发手册已随仓库提供，分为两篇：
+
+- [🌐 现代 Web 开发参考手册（第一篇）：传统后端渲染时代](./🌐%20现代%20Web%20开发参考手册（第一篇）.md) — Web 基础概念，HTML/CSS/JS，HTTP，数据库，传统后端渲染全流程
+- [🌐 现代 Web 开发参考手册（第二篇）：前后端分离时代](./🌐%20现代%20Web%20开发参考手册（第二篇）.md) — 前后端分离架构，Vue 3 实战，JWT 认证，工程化部署
 
 ---
 
-## 🔮 后续改进方向
+## 📄 版权
 
-未来可扩展的方向：
-
-| 方向 | 描述 |
-| :--- | :--- |
-| 🔍 **全文检索升级** | 引入 Elasticsearch 或使用 MySQL FULLTEXT 索引替代 `LIKE`，实现分词、模糊匹配、相关性排序 |
-| 📄 **PDF 自动解析** | 完善 pdfplumber 集成，自动提取标题、作者、参考文献等结构化信息 |
-| 📈 **TF-IDF 增量计算** | 新增文献时自动更新 TF-IDF 权重，替代固定的 1.0 |
-| 🧠 **推荐算法** | 基于用户历史（检索、浏览、收藏）推荐相关文献 |
-| 🕸️ **知识图谱** | 将引用关系可视化为知识图谱，展示学术脉络 |
-| 🔧 **管理员后台** | 增加用户管理、文献审核、系统配置等管理员功能 |
-| 🛡️ **RBAC 权限控制** | 基于角色的访问控制，区分普通用户与管理员 |
-| 📱 **移动端适配** | 优化移动端界面，支持手机访问 |
-
----
-
-## 🤝 贡献指南
-
-本项目为个人毕业设计，欢迎提出建议或报告问题：
-
-1. 在 GitHub 仓库中提交 **Issue**
-2. 发送邮件至作者邮箱
-3. 如有改进方案，欢迎提交 **Pull Request**
-
----
-
-## 📬 联系方式
-
-- **作者**：丁俊杰（hainuo1）
-- **邮箱**：hainuo@stu.njau.edu.cn
-- **GitHub**：[@hainuo1](https://github.com/hainuo1)
-- **学校**：南京农业大学 · 信息与计算科学专业
-
----
-
-## 📄 版权与使用声明
-
-**版权所有 © 2026 丁俊杰（南京农业大学）**
-
-本系统为南京农业大学信息与计算科学专业毕业设计作品，受《中华人民共和国著作权法》保护。
-
-### 您被允许：
-- ✅ **查看**：浏览、阅读本项目源代码及文档
-- ✅ **转载**：在保留完整版权声明及原作者信息的前提下，转载本项目文档或代码片段
-- ✅ **学习参考**：将本项目作为学习 Flask、数据库设计、Web 开发的参考资料
-
-### 您被禁止：
-- ❌ **商业使用**：不得将本系统或其任何部分用于商业目的
-- ❌ **修改后发布**：不得对本项目进行修改、改编后以自己名义重新发布或提交
-- ❌ **抄袭冒用**：严禁将本系统的设计思路、代码结构、界面布局等稍作修改后冒充为自己的原创作品，尤其在毕业设计、课程项目等学术场景中
-
-### 学术诚信特别声明
-
-> 本系统为作者独立完成的毕业设计作品。任何个人或组织若参考本项目进行毕业设计、课程项目或其他学术用途，**必须在参考文献或致谢中明确标注本项目的出处**，严禁整体或部分抄袭后作为自己的成果提交。
-
-**转载时请注明出处**：
-- GitHub 仓库：https://github.com/hainuo1/AcademicSearchSystem
-- 作者：丁俊杰（hainuo1）
-- 学校：南京农业大学 · 信息与计算科学专业
-
-如需获得商业授权或合作使用，请联系作者：hainuo@stu.njau.edu.cn
-
----
+© 2026 南京农业大学 · 信息与计算科学专业 · 毕业设计项目
 
 **⭐ 如果这个项目对你有帮助，欢迎点亮 Star！**
-
-**📌 查看旧版本（v2.0 / v1.0）：请切换至对应分支**
