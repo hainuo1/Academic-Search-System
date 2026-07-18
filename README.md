@@ -337,12 +337,6 @@ TornadoInfo   ─── TornadoTrack
 4. 推送到分支 (`git push origin feature/AmazingFeature`)
 5. 开启 Pull Request
 
----
-
-## 📄 许可证
-
-本项目采用 MIT License 开源协议，详见 [LICENSE](LICENSE) 文件。
-
 <div align="center">
 
 © 2026 南京农业大学 · 信息与计算科学专业
