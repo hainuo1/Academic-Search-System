@@ -1,0 +1,6 @@
+地震数据：
+python import_earthquake_csv.py --dir "地震数据"
+台风数据：
+python import_typhoon_csv.py --file "热带气旋数据\ibtracs.ALL.list.v04r01.csv"
+龙卷风数据：
+python import_usgs_tornado_csv.py --file "龙卷风数据\1950-2024_actual_tornadoes.csv"

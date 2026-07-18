@@ -25,6 +25,12 @@ def create_app():
     app.register_blueprint(prof_bp)
     from routes.stats import stats_bp
     app.register_blueprint(stats_bp)
+    from routes.typhoon import typhoon_bp
+    app.register_blueprint(typhoon_bp)
+    from routes.earthquake import earthquake_bp
+    app.register_blueprint(earthquake_bp)
+    from routes.tornado import tornado_bp
+    app.register_blueprint(tornado_bp)
 
     app.teardown_appcontext(close_connection)
 

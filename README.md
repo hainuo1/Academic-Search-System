@@ -1,64 +1,75 @@
-# 📚 AcademicSearchSystem 4.0 —— 学术文献检索系统
-
-> 基于 Vue 3 + Flask + MySQL 的前后端分离学术文献管理平台
-> 南京农业大学 · 信息与计算科学专业 · 毕业设计
-
-![Vue](https://img.shields.io/badge/Vue-3.5-green.svg)  ![Flask](https://img.shields.io/badge/Flask-3.1-blue.svg)  ![MySQL](https://img.shields.io/badge/MySQL-8.0-orange.svg)
-
----
-
-## 📖 项目概述
-
-学术文献检索系统是一个基于 Web 的学术文献管理与检索平台，4.0 版本在架构上彻底升级为**前后端分离**架构——前端使用 Vue 3 + Vite 构建 SPA 单页应用，后端使用 Flask 提供 REST API 纯数据服务，前后端通过 HTTP + JSON 通信，JWT 无状态认证。
-
-系统支持文献上传、多维度检索、引用关系管理、收藏管理、历史记录追踪、数据统计分析等核心功能。
+# ============================================================
+# 气象科学研究数据平台 — v5.0
+# 基于 Vue 3 + Flask + MySQL 的前后端分离气象科学研究平台
+# 南京农业大学 · 信息与计算科学专业
+# ============================================================
 
 ---
 
-## ✨ 核心功能
+## 项目概述
+
+气象科学研究数据平台是一个面向大气科学研究的综合性 Web 平台，采用前后端分离架构——前端使用 Vue 3 + Vite 构建 SPA 单页应用，后端使用 Flask 提供 REST API 纯数据服务，前后端通过 HTTP + JSON 通信，JWT 无状态认证。
+
+平台包含三大灾害观测模块和学术文献管理模块：
+
+- **热带气旋观测分析**：基于 IBTrACS 国际最佳路径数据集，提供台风历史路径可视化、强度时序分析、风场结构展示及 DeepSeek AI 科学解读
+- **地震数据分析**：基于 USGS 地震目录，提供地震事件查询、震中分布、震级-深度关系分析及 AI 灾害评估
+- **龙卷风数据分析**：基于 NOAA SPC 龙卷风历史数据库，提供龙卷风事件查询、EF 等级分布、灾害影响评估及 AI 风险评估
+- **学术文献检索与管理**：支持多维度文献检索、PDF 上传与全文提取、引文网络分析、文献收藏管理、检索浏览历史追踪及数据统计分析
+
+---
+
+## 核心功能
 
 | 模块 | 功能描述 |
 |:---|:---|
-| 🏠 **欢迎首页** | 系统介绍 + 功能卡片 + 登录/注册入口，无需登录即可浏览 |
-| 🔐 **用户认证** | 注册 / 登录 / 密码找回（安全问题 + 图形验证码），JWT 无状态认证，登录失败锁定机制 |
-| 🔍 **智能检索** | 5 种检索方式 + 高级筛选（日期/分类）+ 分类浏览，搜索关键词高亮 |
-| 📄 **文献管理** | 上传 PDF（自动提取全文）、下载、编辑、删除，个人文献库 |
-| ⭐ **收藏系统** | 一键收藏/取消收藏，收藏列表分页 |
-| 🔗 **引用分析** | 设置文献引用关系，搜索可引用文献，查看引用网络 |
-| 📊 **数据统计** | 6 类 TOP10 排行：热门关键词、活跃用户、高被引、高浏览、高下载、高收藏 |
-| 📝 **历史记录** | 检索历史 + 浏览历史，支持点击关键词重新搜索 |
+| 🌪️ **台风观测** | 路径可视化、强度时序分析、风圈展示、AI 科学解读、出行建议 |
+| 🌍 **地震分析** | 地震事件查询、统计概览、邻近地震关联、AI 灾害评估 |
+| 🌬️ **龙卷风分析** | 龙卷风事件查询、损害解析、区域统计、AI 风险评估 |
+| 🔍 **文献检索** | 标题、作者、分类、关键词、全文五种维度检索 |
+| 📄 **文献管理** | PDF 上传（自动提取全文）、编辑、删除，个人文献库 |
+| ⭐ **文献收藏** | 一键收藏/取消，收藏列表分页 |
+| 🔗 **引文分析** | 文献引用关系管理，引用网络查看 |
+| 📊 **统计总览** | 高频关键词、活跃研究者、高被引文献等 TOP10 排行 |
+| 📝 **使用记录** | 检索历史 + 浏览历史追踪 |
+| 🔐 **用户认证** | 注册、登录、密码找回，JWT 无状态认证，登录失败锁定 |
+| 🤖 **AI 分析** | 集成 DeepSeek 大语言模型，提供灾害智能科学解读 |
 
 ---
 
-## 🏗️ 技术架构
+## 技术架构
 
 ```
 浏览器 (localhost:5173)
     ↓
 Vite 开发服务器 → Vue 3 SPA
-    ↓ axios + JWT Token (Authorization Header)
+    ↓ axios + JWT Token
 Flask API Server (localhost:5000)
     ↓ PyMySQL
 MySQL 数据库 (localhost:3306)
 ```
 
-| 层级 | 技术 | 说明 |
-|:---|:---|:---|
-| 前端框架 | Vue 3（Composition API） | `<script setup>` 语法，单文件组件（SFC） |
-| 前端构建 | Vite 6 | 开发服务器 (5173)，热更新，生产打包 |
-| 前端路由 | Vue Router 4 | 15 个路由，前端路由守卫 |
-| 状态管理 | Pinia 2 | auth（用户状态）+ flash（消息提示） |
-| HTTP 客户端 | axios | 请求拦截自动带 Token，响应拦截 401 自动跳转 |
-| CSS | Tailwind CSS（CDN） | 实用优先样式框架 |
-| 后端框架 | Flask 3.x | Blueprint 模块化路由，仅返回 JSON |
-| 数据库 | MySQL 8.0 | PyMySQL 驱动，utf8mb4 |
-| 认证 | JWT（PyJWT） | 24h 过期，@login_required 装饰器 |
-| 跨域 | flask-cors | 允许 localhost:5173 → 5000 |
-| 一键启动 | AutoHotkey v2 | 双击启动前后端 + 打开浏览器 |
+| 层级 | 技术栈 |
+|:---|:---|
+| 前端框架 | Vue 3（Composition API） |
+| 前端构建 | Vite 6 |
+| 前端路由 | Vue Router 4 |
+| 状态管理 | Pinia 2 |
+| HTTP 客户端 | axios |
+| CSS 框架 | Tailwind CSS（CDN） |
+| 地图可视化 | Leaflet.js + 高德瓦片 |
+| 图表绘制 | Canvas 2D |
+| 后端框架 | Flask 3.x（Blueprint 模块化） |
+| 数据库 | MySQL 8.0 + PyMySQL |
+| 认证 | JWT（PyJWT） |
+| AI 接口 | DeepSeek API |
+| PDF 解析 | pdfplumber |
+| 跨域 | flask-cors |
+| 一键启动 | AutoHotkey v2 |
 
 ---
 
-## 🚀 快速开始
+## 快速开始
 
 ### 环境要求
 
@@ -76,92 +87,168 @@ MySQL 数据库 (localhost:3306)
 CREATE DATABASE AcademicSearchDB CHARACTER SET utf8mb4;
 ```
 
-然后运行项目附带的 `数据库设计.md` 中的建表 SQL，或在 MySQL 客户端中执行。
+依次执行 `数据库相关文件/` 下的 SQL 文件：
 
-修改 `backend/config.py` 中的数据库密码，或设置环境变量：
 ```bash
-set DB_PASSWORD=你的密码    # Windows
-export DB_PASSWORD="你的密码"  # macOS / Linux
+mysql -u root -p AcademicSearchDB < "数据库相关文件/检索系统建表.sql"
+mysql -u root -p AcademicSearchDB < "数据库相关文件/台风模块建表.sql"
+mysql -u root -p AcademicSearchDB < "数据库相关文件/地震模块建表.sql"
+mysql -u root -p AcademicSearchDB < "数据库相关文件/龙卷风模块建表.sql"
 ```
 
-### 方式一：AutoHotkey 一键启动（推荐）
+### 环境变量配置
 
-双击 `启动检索系统.ahk` → 自动启动后端 → 启动前端 → 打开浏览器。
+复制 `.env.example` 为 `.env` 并填入实际值：
 
-### 方式二：手动启动
+```bash
+cp .env.example .env
+```
 
-**后端：**
+需要配置的环境变量：
+
+| 变量 | 必填 | 说明 |
+|:---|:---|:---|
+| `SECRET_KEY` | 否 | Flask 密钥（自动生成随机值） |
+| `DB_HOST` | 否 | 数据库地址（默认 localhost） |
+| `DB_PORT` | 否 | 数据库端口（默认 3306） |
+| `DB_USER` | 否 | 数据库用户（默认 root） |
+| `DB_PASSWORD` | **是** | 数据库密码 |
+| `DB_NAME` | 否 | 数据库名（默认 AcademicSearchDB） |
+| `DEEPSEEK_API_KEY` | 否 | DeepSeek API 密钥（AI 分析功能需要） |
+
+### 数据导入
+
+项目自带了三个 CSV 导入脚本，对应三个灾害模块：
+
+```bash
+# 台风数据（IBTrACS）
+python import_typhoon_csv.py --file "热带气旋数据/ibtracs.ALL.list.v04r01.csv"
+
+# 地震数据（USGS）
+python import_earthquake_csv.py --dir "地震数据"
+
+# 龙卷风数据（NOAA SPC）
+python import_usgs_tornado_csv.py --file "龙卷风数据/1950-2024_actual_tornadoes.csv"
+```
+
+建议先 `--dry-run` 预览，确认后再正式导入。
+
+### 启动
+
+**方式一：一键启动（推荐）**
+
+双击 `启动检索系统.ahk`
+
+**方式二：手动启动**
+
+后端：
 ```bash
 cd backend
 pip install -r requirements.txt
-python app.py          # http://localhost:5000
+python app.py  # http://localhost:5000
 ```
 
-**前端：**
+前端：
 ```bash
 cd frontend
-npm install            # 首次运行
-npm run dev            # http://localhost:5173
+npm install
+npm run dev  # http://localhost:5173
 ```
 
 浏览器访问 `http://localhost:5173/welcome`
 
 ---
 
-## 📂 项目结构
+## 项目结构
 
 ```
-检索系统4.0/
-├── README.md
-├── requirements.txt           # Python 后端依赖
-├── .gitignore
-├── 启动检索系统.ahk            # AutoHotkey 一键启动
-├── 项目各文件说明.md            # 文件结构 + 模块说明
-├── 数据库设计.md               # ER 图 + 10 张表结构 + 约束
+5.0版本/
+├── README.md                          # 项目说明
+├── LICENSE                            # MIT 许可证
+├── .env.example                       # 环境变量模板
+├── .gitignore                         # Git 忽略规则
+├── 启动检索系统.ahk                    # AutoHotkey 一键启动脚本
+├── requirements.txt                   # Python 依赖
 │
-├── backend/                   # Flask API 后端
-│   ├── app.py                 #   入口：创建应用、注册蓝图、配置 CORS
-│   ├── config.py              #   配置：密钥、数据库、上传限制
-│   ├── db.py                  #   数据库层：连接管理 + Row 封装
-│   ├── utils.py               #   工具箱：JWT、分页、@login_required
-│   ├── captcha.py             #   图形验证码
-│   ├── requirements.txt
-│   ├── uploads/               #   PDF 存储
-│   └── routes/                #   7 个蓝图路由
-│       ├── auth.py            #     认证（登录/注册/找回密码）
-│       ├── search.py          #     检索 + 历史
-│       ├── document.py        #     文献 CRUD
-│       ├── favorites.py       #     收藏
-│       ├── citation.py        #     引用关系
-│       ├── profile.py         #     个人信息
-│       └── stats.py           #     统计排行
+├── import_typhoon_csv.py              # IBTrACS 台风数据导入脚本
+├── import_earthquake_csv.py           # USGS 地震数据导入脚本
+├── import_usgs_tornado_csv.py         # NOAA SPC 龙卷风数据导入脚本
 │
-└── frontend/                  # Vue 3 前端
-    ├── index.html             #   浏览器入口
-    ├── package.json           #   前端依赖
-    ├── vite.config.js         #   Vite 配置
+├── 数据库相关文件/                     # 数据库 SQL
+│   ├── 检索系统建表.sql
+│   ├── 检索系统数据模拟生成.sql
+│   ├── 台风模块建表.sql
+│   ├── 地震模块建表.sql
+│   └── 龙卷风模块建表.sql
+│
+├── 热带气旋数据/                       # 台风 CSV 数据（可选）
+├── 地震数据/                           # 地震 CSV 数据（可选）
+├── 龙卷风数据/                         # 龙卷风 CSV 数据（可选）
+│
+├── backend/                           # Flask API 后端
+│   ├── app.py                         #   应用入口
+│   ├── config.py                      #   集中配置（通过环境变量管理敏感信息）
+│   ├── db.py                          #   数据库层（Row / RowCursor 包装）
+│   ├── utils.py                       #   工具函数（JWT、分页、认证装饰器）
+│   ├── captcha.py                     #   图形验证码生成
+│   ├── uploads/                       #   PDF 存储目录（gitignored）
+│   └── routes/                        #   蓝图路由（10 个模块）
+│       ├── __init__.py
+│       ├── auth.py                    #     用户认证（注册/登录/找回密码）
+│       ├── search.py                  #     文献检索 + 浏览/检索历史
+│       ├── document.py                #     文献 CRUD
+│       ├── favorites.py               #     文献收藏
+│       ├── citation.py                #     引文关系
+│       ├── profile.py                 #     个人信息
+│       ├── stats.py                   #     统计排行
+│       ├── typhoon.py                 #     台风数据分析 + AI 分析
+│       ├── earthquake.py              #     地震数据分析 + AI 分析
+│       └── tornado.py                 #     龙卷风数据分析 + AI 分析
+│
+└── frontend/                          # Vue 3 前端
+    ├── index.html                     #   浏览器入口
+    ├── package.json                   #   前端依赖
+    ├── vite.config.js                 #   Vite 配置
     └── src/
-        ├── main.js            #   Vue 启动器
-        ├── App.vue            #   根组件（导航栏 + 页脚）
-        ├── api/index.js       #   axios 实例 + 拦截器
-        ├── router/index.js    #   路由表 + 守卫
-        ├── stores/            #   Pinia 状态管理
-        └── views/             #   15 个页面组件
+        ├── main.js                    #   Vue 启动器
+        ├── App.vue                    #   根组件（导航栏 + 页脚）
+        ├── api/index.js               #   axios 实例 + JWT 拦截器
+        ├── router/index.js            #   路由表 + 守卫
+        ├── stores/                    #   Pinia 状态管理
+        │   └── auth.js                #     认证状态
+        └── views/                     #   页面组件（20+）
+            ├── WelcomeView.vue            # 欢迎首页
+            ├── DashboardView.vue          # 功能入口面板
+            ├── TyphoonView.vue            # 台风列表
+            ├── TyphoonDetail.vue          # 台风详情（路径地图 + 强度图表 + AI）
+            ├── EarthquakeView.vue         # 地震列表
+            ├── EarthquakeDetail.vue       # 地震详情
+            ├── TornadoView.vue            # 龙卷风列表
+            ├── TornadoDetail.vue          # 龙卷风详情
+            ├── LoginView.vue              # 登录
+            ├── RegisterView.vue           # 注册
+            ├── ForgotPasswordView.vue     # 找回密码
+            ├── SearchView.vue             # 文献检索
+            ├── DocumentView.vue           # 文献详情
+            ├── UploadView.vue             # 文献上传
+            ├── EditDocumentView.vue       # 文献编辑
+            ├── MyDocumentsView.vue        # 个人文献库
+            ├── FavoritesView.vue          # 文献收藏
+            ├── HistoryView.vue            # 使用记录
+            ├── StatsView.vue              # 统计总览
+            ├── CitationView.vue           # 引文关系
+            ├── ProfileView.vue            # 个人中心
+            └── ErrorView.vue              # 404 错误
 ```
 
 ---
 
-## 🔗 配套文档
+## 许可证
 
-本项目的开发手册已随仓库提供，分为两篇：
-
-- [🌐 现代 Web 开发参考手册（第一篇）：传统后端渲染时代](./🌐%20现代%20Web%20开发参考手册（第一篇）.md) — Web 基础概念，HTML/CSS/JS，HTTP，数据库，传统后端渲染全流程
-- [🌐 现代 Web 开发参考手册（第二篇）：前后端分离时代](./🌐%20现代%20Web%20开发参考手册（第二篇）.md) — 前后端分离架构，Vue 3 实战，JWT 认证，工程化部署
+本项目采用 MIT 许可证，详见 [LICENSE](./LICENSE) 文件。
 
 ---
 
-## 📄 版权
+© 2026 南京农业大学 · 信息与计算科学专业
 
-© 2026 南京农业大学 · 信息与计算科学专业 · 毕业设计项目
-
-**⭐ 如果这个项目对你有帮助，欢迎点亮 Star！**
+丁俊杰 · hainuo@stu.njau.edu.cn

@@ -1,147 +1,133 @@
 <template>
 <div>
-  <!-- ====== 英雄区域 ====== -->
-  <section class="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-800 animate-gradient">
-      <div class="absolute top-20 left-10 w-64 h-64 bg-white/5 rounded-full blur-2xl animate-float-slow"></div>
-      <div class="absolute bottom-20 right-10 w-96 h-96 bg-white/5 rounded-full blur-2xl animate-float-delay"></div>
-      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-white/5 rounded-full blur-3xl animate-float-slower"></div>
+  <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-slate-950 via-blue-950 to-indigo-950">
+      <div class="absolute inset-0 opacity-20" style="background:
+        radial-gradient(ellipse 80% 60% at 20% 40%, rgba(56,189,248,0.3) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 70% 30%, rgba(99,102,241,0.25) 0%, transparent 60%),
+        radial-gradient(ellipse 70% 40% at 50% 70%, rgba(34,211,238,0.2) 0%, transparent 50%),
+        radial-gradient(ellipse 50% 30% at 85% 60%, rgba(148,163,184,0.15) 0%, transparent 50%)">
+      </div>
+      <div class="absolute inset-0 opacity-15"
+        style="background-image:radial-gradient(1px 1px at 10% 15%,#e2e8f0,transparent),radial-gradient(1px 1px at 25% 45%,#e2e8f0,transparent),radial-gradient(1px 1px at 40% 25%,#e2e8f0,transparent),radial-gradient(1px 1px at 55% 55%,#e2e8f0,transparent),radial-gradient(1px 1px at 70% 35%,#e2e8f0,transparent),radial-gradient(1px 1px at 85% 65%,#e2e8f0,transparent),radial-gradient(1px 1px at 15% 75%,#e2e8f0,transparent),radial-gradient(1px 1px at 60% 80%,#e2e8f0,transparent),radial-gradient(1px 1px at 90% 15%,#e2e8f0,transparent),radial-gradient(1px 1px at 35% 85%,#e2e8f0,transparent)">
+      </div>
+      <div class="absolute top-0 left-1/4 w-[500px] h-[300px] bg-cyan-500/10 rounded-full blur-[100px] animate-float-slow"></div>
+      <div class="absolute bottom-0 right-1/4 w-[400px] h-[250px] bg-indigo-500/10 rounded-full blur-[100px] animate-float-delay"></div>
     </div>
 
-    <div class="relative z-10 max-w-4xl mx-auto px-6 text-center text-white">
-      <!-- 校名标签 -->
-      <div class="inline-block px-4 py-1.5 mb-6 bg-white/20 backdrop-blur-sm rounded-full text-sm font-medium tracking-wider border border-white/10">
-        🏛️ 南京农业大学 · 学术文献检索系统
+    <div class="relative z-10 max-w-3xl mx-auto px-6 text-center text-white">
+      <div class="inline-flex items-center gap-2 px-5 py-2 mb-10 bg-white/8 backdrop-blur-md rounded-full text-sm font-light tracking-wide border border-white/10 text-blue-200/80">
+        <span class="text-cyan-400/70">◆</span> 南京农业大学 · 气象科学研究数据平台
       </div>
 
-      <!-- 主标题 -->
-      <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight">
-        探索学术<span class="text-yellow-300">新</span>世界
+      <div class="mb-8">
+        <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 shadow-[0_0_60px_rgba(34,211,238,0.15)]">
+          <i class="fa fa-globe text-4xl text-cyan-300/80"></i>
+        </div>
+      </div>
+
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-light mb-6 leading-tight tracking-wide">
+        <span class="bg-gradient-to-r from-cyan-200 via-blue-200 to-indigo-200 bg-clip-text text-transparent">
+          气象科学研究数据平台
+        </span>
       </h1>
 
-      <!-- 副标题 -->
-      <p class="text-xl md:text-2xl text-blue-100 mb-4">汇聚海量学术文献，智能检索 · 引用分析 · 数据洞察</p>
-
-      <!-- 描述 -->
-      <p class="text-base md:text-lg text-blue-50/80 max-w-2xl mx-auto mb-10 leading-relaxed">
-        为学术研究提供一站式解决方案 —— 支持标题、作者、分类、关键词、全文五种检索方式，
-        收藏管理、引用分析、数据统计，让您的学术探索更高效。
+      <p class="text-lg md:text-xl text-blue-200/60 mb-4 font-light tracking-wider">
+        自然灾害观测数据分析 · 学术文献检索与管理 · AI 辅助研究
       </p>
 
-      <!-- 登录 / 注册入口 -->
+      <p class="text-sm md:text-base text-blue-200/30 max-w-xl mx-auto mb-12 leading-relaxed">
+        面向大气科学研究的综合性数据平台——集成多源自然灾害历史观测数据的可视化分析，
+        搭载 DeepSeek 大语言模型智能解读引擎，同步提供学术文献的多维度检索与知识管理服务。
+      </p>
+
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
         <router-link to="/login"
-          class="px-10 py-3.5 bg-white text-blue-700 font-semibold rounded-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-0.5 text-lg shadow-lg">
-          <i class="fa fa-sign-in mr-2"></i>登录
+          class="px-10 py-3.5 bg-white/90 text-indigo-800 font-medium rounded-2xl hover:bg-white hover:shadow-2xl hover:shadow-cyan-500/20 transition-all duration-500 transform hover:-translate-y-0.5 text-base">
+          登录平台
         </router-link>
         <router-link to="/register"
-          class="px-10 py-3.5 bg-white/20 backdrop-blur-sm text-white font-semibold rounded-xl border border-white/30 hover:bg-white/30 transition-all duration-300 text-lg">
-          <i class="fa fa-user-plus mr-2"></i>注册
+          class="px-10 py-3.5 bg-white/8 text-white/80 font-medium rounded-2xl border border-white/15 hover:bg-white/15 hover:text-white hover:border-white/25 transition-all duration-500 text-base">
+          注册账号
         </router-link>
       </div>
 
-      <p class="text-blue-200/60 text-sm mt-6">已有账号请登录，新用户请免费注册</p>
+      <p class="text-blue-200/20 text-xs mt-8">已有账号可直接登录，新用户请注册后使用</p>
     </div>
 
-    <!-- 底部滚动指示器 -->
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 text-white/40 animate-bounce">
-      <i class="fa fa-chevron-down text-xl"></i>
-    </div>
-  </section>
-
-  <!-- ====== 核心功能卡片 ====== -->
-  <section class="max-w-7xl mx-auto px-6 py-16">
-    <div class="text-center mb-14">
-      <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-3">核心功能</h2>
-      <p class="text-gray-500 text-base">为学术研究打造的完整工具链</p>
-      <div class="w-16 h-1 bg-gradient-to-r from-blue-600 to-indigo-600 mx-auto mt-3 rounded-full"></div>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- 智能检索 -->
-      <div class="group bg-white rounded-2xl shadow-md hover:shadow-xl p-6 transition-all duration-300 transform hover:-translate-y-2 border border-gray-100/50 hover:border-blue-200">
-        <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform duration-300">
-          <i class="fa fa-search text-white text-2xl"></i>
-        </div>
-        <h3 class="text-lg font-semibold text-gray-800 mb-2">智能检索</h3>
-        <p class="text-gray-500 text-sm leading-relaxed">支持标题、作者、分类、关键词、全文五种检索方式，精准定位目标文献。</p>
-      </div>
-
-      <!-- 收藏管理 -->
-      <div class="group bg-white rounded-2xl shadow-md hover:shadow-xl p-6 transition-all duration-300 transform hover:-translate-y-2 border border-gray-100/50 hover:border-yellow-200">
-        <div class="w-14 h-14 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-yellow-400/20 group-hover:scale-110 transition-transform duration-300">
-          <i class="fa fa-star text-white text-2xl"></i>
-        </div>
-        <h3 class="text-lg font-semibold text-gray-800 mb-2">收藏管理</h3>
-        <p class="text-gray-500 text-sm leading-relaxed">一键收藏感兴趣的文献，构建个人知识库，随时查阅，永不丢失。</p>
-      </div>
-
-      <!-- 引用分析 -->
-      <div class="group bg-white rounded-2xl shadow-md hover:shadow-xl p-6 transition-all duration-300 transform hover:-translate-y-2 border border-gray-100/50 hover:border-purple-200">
-        <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-purple-500/20 group-hover:scale-110 transition-transform duration-300">
-          <i class="fa fa-link text-white text-2xl"></i>
-        </div>
-        <h3 class="text-lg font-semibold text-gray-800 mb-2">引用分析</h3>
-        <p class="text-gray-500 text-sm leading-relaxed">查看文献引用关系，追踪研究脉络，发现领域内的重要成果。</p>
-      </div>
-
-      <!-- 数据洞察 -->
-      <div class="group bg-white rounded-2xl shadow-md hover:shadow-xl p-6 transition-all duration-300 transform hover:-translate-y-2 border border-gray-100/50 hover:border-green-200">
-        <div class="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-green-500/20 group-hover:scale-110 transition-transform duration-300">
-          <i class="fa fa-bar-chart text-white text-2xl"></i>
-        </div>
-        <h3 class="text-lg font-semibold text-gray-800 mb-2">数据洞察</h3>
-        <p class="text-gray-500 text-sm leading-relaxed">热门关键词、活跃用户、高被引文献 —— 多维数据，一目了然。</p>
-      </div>
-
-      <!-- 个人文献库 -->
-      <div class="group bg-white rounded-2xl shadow-md hover:shadow-xl p-6 transition-all duration-300 transform hover:-translate-y-2 border border-gray-100/50 hover:border-indigo-200">
-        <div class="w-14 h-14 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-indigo-500/20 group-hover:scale-110 transition-transform duration-300">
-          <i class="fa fa-file-text text-white text-2xl"></i>
-        </div>
-        <h3 class="text-lg font-semibold text-gray-800 mb-2">个人文献库</h3>
-        <p class="text-gray-500 text-sm leading-relaxed">上传、管理、编辑您的文献，构建专属学术资源中心。</p>
-      </div>
-
-      <!-- 历史记录 -->
-      <div class="group bg-white rounded-2xl shadow-md hover:shadow-xl p-6 transition-all duration-300 transform hover:-translate-y-2 border border-gray-100/50 hover:border-gray-300">
-        <div class="w-14 h-14 bg-gradient-to-br from-gray-600 to-gray-700 rounded-2xl flex items-center justify-center mb-4 shadow-lg shadow-gray-500/20 group-hover:scale-110 transition-transform duration-300">
-          <i class="fa fa-history text-white text-2xl"></i>
-        </div>
-        <h3 class="text-lg font-semibold text-gray-800 mb-2">历史记录</h3>
-        <p class="text-gray-500 text-sm leading-relaxed">检索历史 + 浏览历史，永不丢失您的学术探索足迹。</p>
-      </div>
+    <div class="absolute bottom-12 left-1/2 -translate-x-1/2 z-10 text-white/15 animate-bounce">
+      <i class="fa fa-chevron-down"></i>
     </div>
   </section>
 
-  <!-- ====== 数据统计展示 ====== -->
-  <section class="bg-gray-50 py-16 border-t border-gray-100">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="grid grid-cols-3 gap-8 text-center">
-        <div>
-          <div class="text-4xl md:text-5xl font-bold text-blue-600">1000+</div>
-          <div class="text-sm text-gray-500 mt-2">学术文献</div>
-          <div class="text-xs text-gray-400 mt-1">涵盖多学科领域</div>
+  <!-- 平台功能概览 -->
+  <section class="bg-white py-24">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <p class="text-xs text-slate-400 tracking-[0.2em] uppercase mb-3 font-medium">system overview</p>
+        <h2 class="text-2xl md:text-3xl font-light text-slate-800 mb-3">两大功能模块</h2>
+        <p class="text-slate-400 text-sm max-w-md mx-auto">自然灾害观测数据分析与学术文献检索管理并行</p>
+        <div class="w-12 h-px bg-gradient-to-r from-cyan-400 to-indigo-500 mx-auto mt-6"></div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- 自然灾害观测 -->
+        <div class="group bg-slate-50 rounded-3xl p-8 md:p-10 transition-all duration-500 hover:shadow-2xl hover:shadow-cyan-500/5 border border-slate-100 hover:border-cyan-200">
+          <div class="flex items-start gap-4 mb-6">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center shadow-lg shadow-cyan-500/15 flex-shrink-0">
+              <i class="fa fa-globe text-white text-xl"></i>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-slate-800 mb-1">自然灾害观测数据分析</h3>
+              <p class="text-xs text-slate-400">Natural Disaster Observation & Analysis</p>
+            </div>
+          </div>
+          <p class="text-sm text-slate-500 leading-relaxed mb-6">
+            基于国际权威气象数据集（IBTrACS），提供台风等自然灾害的历史路径可视化、
+            强度时序分析、风场结构展示，并结合 DeepSeek 大语言模型进行 AI 辅助科学解读。
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1.5 bg-cyan-100/50 text-cyan-700 text-xs rounded-full font-medium">热带气旋</span>
+            <span class="px-3 py-1.5 bg-slate-100 text-slate-300 text-xs rounded-full">洪涝灾害</span>
+            <span class="px-3 py-1.5 bg-slate-100 text-slate-300 text-xs rounded-full">地震监测</span>
+          </div>
         </div>
-        <div>
-          <div class="text-4xl md:text-5xl font-bold text-indigo-600">10+</div>
-          <div class="text-sm text-gray-500 mt-2">学科分类</div>
-          <div class="text-xs text-gray-400 mt-1">人工智能、数据科学等</div>
-        </div>
-        <div>
-          <div class="text-4xl md:text-5xl font-bold text-purple-600">100+</div>
-          <div class="text-sm text-gray-500 mt-2">引用关系</div>
-          <div class="text-xs text-gray-400 mt-1">追踪学术脉络</div>
+
+        <!-- 学术文献检索 -->
+        <div class="group bg-slate-50 rounded-3xl p-8 md:p-10 transition-all duration-500 hover:shadow-2xl hover:shadow-indigo-500/5 border border-slate-100 hover:border-indigo-200">
+          <div class="flex items-start gap-4 mb-6">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center shadow-lg shadow-indigo-500/15 flex-shrink-0">
+              <i class="fa fa-book text-white text-xl"></i>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-slate-800 mb-1">学术文献检索与管理</h3>
+              <p class="text-xs text-slate-400">Academic Literature Retrieval & Management</p>
+            </div>
+          </div>
+          <p class="text-sm text-slate-500 leading-relaxed mb-6">
+            支持按标题、作者、学科分类、关键词及全文内容进行多维度检索。提供 PDF 文献上传
+            与自动全文提取、引文网络分析、个人文献收藏管理、检索与浏览历史追溯、数据统计分析等功能。
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1.5 bg-indigo-100/50 text-indigo-700 text-xs rounded-full font-medium">多维度检索</span>
+            <span class="px-3 py-1.5 bg-indigo-100/50 text-indigo-700 text-xs rounded-full font-medium">引文分析</span>
+            <span class="px-3 py-1.5 bg-indigo-100/50 text-indigo-700 text-xs rounded-full font-medium">文献管理</span>
+            <span class="px-3 py-1.5 bg-indigo-100/50 text-indigo-700 text-xs rounded-full font-medium">统计分析</span>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ====== 页脚 ====== -->
-  <footer class="bg-gray-800 text-white py-8">
+  <!-- 页脚 -->
+  <footer class="bg-slate-900 text-white py-12">
     <div class="max-w-7xl mx-auto px-4 text-center">
-      <p class="text-gray-400 mb-2">&copy; 2026 南京农业大学 · 学术文献检索系统</p>
-      <p class="text-gray-500 text-sm">信息与计算科学专业 · 毕设项目</p>
+      <div class="flex items-center justify-center gap-2 mb-3 text-slate-500">
+        <i class="fa fa-cloud text-xs"></i>
+        <span class="text-xs tracking-wide">气象科学研究数据平台</span>
+      </div>
+      <p class="text-slate-500 text-xs mb-1">&copy; 2026 南京农业大学 · 信息与计算科学专业</p>
+      <p class="text-slate-600 text-xs">丁俊杰 · hainuo@stu.njau.edu.cn</p>
     </div>
   </footer>
 </div>
@@ -151,27 +137,15 @@
 </script>
 
 <style scoped>
-@keyframes gradient {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-.animate-gradient { background-size: 200% 200%; animation: gradient 6s ease infinite; }
-
 @keyframes float-slow {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-30px) scale(1.05); }
 }
-.animate-float-slow { animation: float-slow 8s ease-in-out infinite; }
+.animate-float-slow { animation: float-slow 12s ease-in-out infinite; }
 
 @keyframes float-delay {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.03); }
 }
-.animate-float-delay { animation: float-delay 10s ease-in-out infinite 2s; }
-
-@keyframes float-slower {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); }
-  50% { transform: translate(-50%, -50%) scale(1.05); }
-}
-.animate-float-slower { animation: float-slower 12s ease-in-out infinite 1s; }
+.animate-float-delay { animation: float-delay 14s ease-in-out infinite 3s; }
 </style>

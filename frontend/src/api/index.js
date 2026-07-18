@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const api = axios.create({ baseURL: 'http://localhost:5000', timeout: 15000 })
+const api = axios.create({ baseURL: 'http://localhost:5000', timeout: 15000, withCredentials: true })
 
 // 请求拦截器：自动带 Token
 api.interceptors.request.use(c => {

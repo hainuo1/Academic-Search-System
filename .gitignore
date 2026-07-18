@@ -1,7 +1,21 @@
 node_modules/
+dist/
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 uploads/
 .venv/
 .env
 .DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.egg-info/
+*.egg
+*.log
+"" 
+"# 灾害数据 CSV（体积过大，从官方源下载）" 
+"热带气旋数据/" 
+"地震数据/" 
+"龙卷风数据/" 
