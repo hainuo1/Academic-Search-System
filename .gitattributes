@@ -1,0 +1,2 @@
+# Large files managed by Git LFS
+*.csv filter=lfs diff=lfs merge=lfs -text
