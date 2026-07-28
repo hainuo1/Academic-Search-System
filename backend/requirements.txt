@@ -1,0 +1,14 @@
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+sqlalchemy==2.0.35
+psycopg2-binary==2.9.9
+pydantic==2.9.2
+pydantic-settings==2.5.2
+PyJWT==2.10.1
+cryptography==43.0.3
+python-multipart==0.0.12
+werkzeug>=3.0.4
+pdfplumber==0.11.4
+requests==2.32.3
+Pillow==10.4.0
+geoalchemy2==0.15.2
