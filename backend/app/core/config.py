@@ -8,7 +8,7 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     # ── 应用 ──
     APP_NAME: str = "气象科学研究数据平台"
-    VERSION: str = "6.0.0"
+    VERSION: str = "6.1.0"
     DEBUG: bool = True
     # ⚠️ 生产环境请通过环境变量覆盖此值
     SECRET_KEY: str = "change-me-in-production"

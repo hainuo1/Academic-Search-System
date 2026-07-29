@@ -7,7 +7,7 @@
     <div class="w-full md:w-2/5 p-8 md:p-10 flex flex-col justify-between relative overflow-hidden">
       <div class="absolute -top-20 -right-20 w-60 h-60 bg-cyan-500/15 rounded-full blur-3xl"></div>
       <div class="absolute -bottom-20 -left-20 w-60 h-60 bg-indigo-500/10 rounded-full blur-3xl"></div>
-      <div class="relative z-10"><div class="flex items-center gap-2 text-white/60 mb-10"><i class="fa fa-cloud text-cyan-400/80 text-lg"></i><span class="text-sm font-light tracking-widest">气象科学研究数据平台 v6.0</span></div><h2 class="text-3xl font-light text-white leading-tight tracking-wide">欢迎回来</h2><p class="text-blue-200/50 text-sm mt-3 leading-relaxed max-w-xs">登录您的账户，访问自然灾害观测数据分析与学术文献检索管理服务。</p></div>
+      <div class="relative z-10"><div class="flex items-center gap-2 text-white/60 mb-10"><i class="fa fa-cloud text-cyan-400/80 text-lg"></i><span class="text-sm font-light tracking-widest">气象科学研究数据平台 v6.1</span></div><h2 class="text-3xl font-light text-white leading-tight tracking-wide">欢迎回来</h2><p class="text-blue-200/50 text-sm mt-3 leading-relaxed max-w-xs">登录您的账户，访问自然灾害观测数据分析与学术文献检索管理服务。</p></div>
       <div class="relative z-10 mt-8 space-y-2"><div class="flex items-center gap-3 text-white/30 text-xs"><div class="w-1.5 h-1.5 rounded-full bg-cyan-400/60"></div><span>热带气旋路径可视化与 AI 科学解读</span></div><div class="flex items-center gap-3 text-white/30 text-xs"><div class="w-1.5 h-1.5 rounded-full bg-indigo-400/60"></div><span>学术文献多维度检索与知识管理</span></div><div class="flex items-center gap-3 text-white/30 text-xs"><div class="w-1.5 h-1.5 rounded-full bg-blue-400/60"></div><span>DeepSeek 大语言模型科学辅助分析</span></div></div>
     </div>
     <div class="w-full md:w-3/5 p-8 md:p-14 flex items-center justify-center bg-white/[0.03] backdrop-blur-sm">

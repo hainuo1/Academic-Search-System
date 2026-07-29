@@ -25,23 +25,30 @@
         <p v-if="dlErr" class="text-red-500 text-sm mt-2 flex items-center gap-1"><i class="fa fa-exclamation-circle"></i>{{ dlErr }}</p>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8 pb-8 border-b border-slate-100">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <div class="flex items-center text-slate-600 text-sm"><i class="fa fa-user text-indigo-400 mr-2.5 w-5 text-center"></i><span class="font-medium text-slate-700">作者：</span><span class="ml-1.5">{{ doc.author }}</span></div>
-        <div class="flex items-center text-slate-600 text-sm"><i class="fa fa-folder text-indigo-400 mr-2.5 w-5 text-center"></i><span class="font-medium text-slate-700">分类：</span><span class="ml-1.5">{{ doc.category }}</span></div>
         <div class="flex items-center text-slate-600 text-sm"><i class="fa fa-calendar text-indigo-400 mr-2.5 w-5 text-center"></i><span class="font-medium text-slate-700">发表日期：</span><span class="ml-1.5">{{ doc.publish_date }}</span></div>
         <div class="flex items-center text-slate-600 text-sm"><i class="fa fa-eye text-indigo-400 mr-2.5 w-5 text-center"></i><span class="font-medium text-slate-700">浏览次数：</span><span class="ml-1.5">{{ doc.view_count }}</span></div>
         <div class="flex items-center text-slate-600 text-sm"><i class="fa fa-download text-indigo-400 mr-2.5 w-5 text-center"></i><span class="font-medium text-slate-700">下载次数：</span><span class="ml-1.5">{{ doc.download_count }}</span></div>
       </div>
 
+      <!-- 分类：单独一行，标签形式 -->
       <div class="flex items-start text-slate-600 mb-4 text-sm">
-        <i class="fa fa-tags text-indigo-400 mr-2.5 mt-0.5 w-5 text-center"></i><span class="font-medium text-slate-700">关键词：</span>
+        <i class="fa fa-folder text-indigo-400 mr-2.5 mt-0.5 w-5 text-center flex-shrink-0"></i><span class="font-medium text-slate-700 flex-shrink-0">分类：</span>
+        <div class="ml-1.5 flex flex-wrap gap-1.5">
+          <span v-for="cat in docCategories" :key="cat" class="bg-purple-50 text-purple-600 px-2.5 py-0.5 rounded-lg text-xs font-medium">{{ cat }}</span>
+        </div>
+      </div>
+
+      <div class="flex items-start text-slate-600 mb-4 text-sm">
+        <i class="fa fa-tags text-indigo-400 mr-2.5 mt-0.5 w-5 text-center flex-shrink-0"></i><span class="font-medium text-slate-700 flex-shrink-0">关键词：</span>
         <div class="ml-1.5 flex flex-wrap gap-1.5">
           <span v-for="kw in keywords" :key="kw" class="bg-indigo-50 text-indigo-600 px-2.5 py-0.5 rounded-lg text-xs font-medium">{{ kw }}</span>
         </div>
       </div>
 
-      <div class="flex items-center text-slate-600 mb-6 text-sm">
-        <i class="fa fa-link text-indigo-400 mr-2.5 w-5 text-center"></i><span class="font-medium text-slate-700">被引次数：</span><span class="ml-1.5">{{ citCnt }}</span>
+      <div class="flex items-center text-slate-600 mb-6 text-sm pb-8 border-b border-slate-100">
+        <i class="fa fa-link text-indigo-400 mr-2.5 w-5 text-center"></i><span class="font-medium text-slate-700">引用：</span><span class="ml-1.5">引用了 {{ citesCount }} 篇文献，被 {{ citedByCount }} 篇文献引用</span>
       </div>
 
       <div>
@@ -52,16 +59,39 @@
       </div>
     </div>
 
-    <div v-if="cits.length" class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-slate-100 p-8">
+    <!-- 引用关系 -->
+    <div class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-slate-100 p-8 mb-8">
       <h2 class="text-lg font-semibold text-slate-800 mb-6 flex items-center gap-2">
         <span class="w-1 h-5 bg-indigo-500 rounded-full"></span>
-        <i class="fa fa-link text-indigo-400 mr-1"></i>引用本文的文献
+        <i class="fa fa-link text-indigo-400 mr-1"></i>引用关系
       </h2>
-      <div class="space-y-3">
-        <router-link v-for="c in cits" :key="c.id" :to="`/document/${c.id}`"
-          class="block p-4 bg-slate-50 rounded-xl hover:bg-indigo-50 transition-colors text-slate-700 hover:text-indigo-700 text-sm font-medium border border-transparent hover:border-indigo-100">
-          {{ c.title }}
-        </router-link>
+
+      <!-- 本文引用了哪些文献 -->
+      <div class="mb-6">
+        <h3 class="text-sm font-semibold text-slate-600 mb-3 flex items-center gap-1.5">
+          <i class="fa fa-share text-emerald-500"></i>本文引用了以下文献
+        </h3>
+        <div v-if="cites.length" class="space-y-2">
+          <router-link v-for="c in cites" :key="c.id" :to="`/document/${c.id}`"
+            class="block p-3 bg-emerald-50 rounded-xl hover:bg-emerald-100 transition-colors text-emerald-700 hover:text-emerald-800 text-sm font-medium border border-transparent hover:border-emerald-200">
+            {{ c.title }}
+          </router-link>
+        </div>
+        <p v-else class="text-slate-400 text-sm py-3 px-4 bg-slate-50 rounded-xl">暂无引用文献</p>
+      </div>
+
+      <!-- 哪些文献引用了本文 -->
+      <div>
+        <h3 class="text-sm font-semibold text-slate-600 mb-3 flex items-center gap-1.5">
+          <i class="fa fa-reply text-amber-500"></i>以下文献引用了本文
+        </h3>
+        <div v-if="cits.length" class="space-y-2">
+          <router-link v-for="c in cits" :key="c.id" :to="`/document/${c.id}`"
+            class="block p-3 bg-amber-50 rounded-xl hover:bg-amber-100 transition-colors text-amber-700 hover:text-amber-800 text-sm font-medium border border-transparent hover:border-amber-200">
+            {{ c.title }}
+          </router-link>
+        </div>
+        <p v-else class="text-slate-400 text-sm py-3 px-4 bg-slate-50 rounded-xl">暂无文献引用本文</p>
       </div>
     </div>
   </template>
@@ -76,19 +106,29 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '../api'
 
 const route = useRoute()
-const doc = ref(null); const keywords = ref([]); const cits = ref([]); const citCnt = ref(0); const fav = ref(false); const loading = ref(true); const dlErr = ref('')
+const doc = ref(null); const keywords = ref([]); const cits = ref([]); const cites = ref([]); const citedByCount = ref(0); const citesCount = ref(0); const fav = ref(false); const loading = ref(true); const dlErr = ref('')
 
-onMounted(async () => {
+const docCategories = computed(() => {
+  return doc.value?.category ? doc.value.category.split(',').map(s => s.trim()).filter(Boolean) : []
+})
+
+async function loadDoc(id) {
+  loading.value = true; doc.value = null; dlErr.value = ''
   try {
-    const r = await api.get(`/api/document/${route.params.id}`)
-    if (r.data.code === 200) { const d = r.data.data; doc.value = d.document; keywords.value = d.keywords; cits.value = d.citations; citCnt.value = d.citation_count; fav.value = d.is_favorited }
+    const r = await api.get(`/api/document/${id}`)
+    if (r.data.code === 200) { const d = r.data.data; doc.value = d.document; keywords.value = d.keywords; cits.value = d.citations || []; cites.value = d.cites || []; citedByCount.value = d.cited_by_count || 0; citesCount.value = d.cites_count || 0; fav.value = d.is_favorited }
     else doc.value = null
   } catch (e) { doc.value = null } finally { loading.value = false }
+}
+
+onMounted(() => loadDoc(route.params.id))
+watch(() => route.params.id, (newId) => {
+  if (newId) { loadDoc(newId); window.scrollTo(0, 0) }
 })
 
 async function toggleFav() {
@@ -103,7 +143,8 @@ async function downloadPdf() {
     const link = document.createElement('a')
     link.href = url
     const disposition = resp.headers['content-disposition']
-    link.download = disposition ? decodeURIComponent(disposition.split("filename*=UTF-8''")[1] || disposition.split('filename=')[1] || 'document.pdf') : 'document.pdf'
+    const m = disposition?.match(/filename\*=UTF-8''(.+)/i)
+    link.download = m ? decodeURIComponent(m[1]) : (disposition?.split('filename=')[1]?.replace(/"/g,'') || 'document.pdf')
     document.body.appendChild(link); link.click(); document.body.removeChild(link)
     window.URL.revokeObjectURL(url)
   } catch (e) { dlErr.value = '文件不存在，可能已被删除' }

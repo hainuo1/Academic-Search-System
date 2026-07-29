@@ -89,7 +89,8 @@ async function downloadPdf(docId) {
     const link = document.createElement('a')
     link.href = url
     const disposition = resp.headers['content-disposition']
-    link.download = disposition ? decodeURIComponent(disposition.split("filename*=UTF-8''")[1] || disposition.split('filename=')[1] || 'document.pdf') : 'document.pdf'
+    const m = disposition?.match(/filename\*=UTF-8''(.+)/i)
+    link.download = m ? decodeURIComponent(m[1]) : (disposition?.split('filename=')[1]?.replace(/"/g,'') || 'document.pdf')
     document.body.appendChild(link); link.click(); document.body.removeChild(link)
     window.URL.revokeObjectURL(url)
   } catch (e) { alert('下载失败，请稍后重试') }

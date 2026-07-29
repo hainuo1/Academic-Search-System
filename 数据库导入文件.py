@@ -29,7 +29,7 @@ if not CONFIG["password"]:
     sys.exit(1)
 
 # 数据集目录（根据实际情况修改）
-DATA_DIR = r"C:\Users\hainuo\Desktop\检索系统\6.0版本\数据集"
+DATA_DIR = r"C:\Users\hainuo\Desktop\检索系统\6.1版本\数据集"
 # =====================================================================
 
 # ---- 热带气旋区域过滤（太平洋区域）----
@@ -38,12 +38,12 @@ PACIFIC_LON_MAX = 180.0
 PACIFIC_LAT_MIN = 0.0
 PACIFIC_LAT_MAX = 60.0
 
-# ---- 地震区域过滤（中国及周边）----
+# ---- 地震区域过滤（世界范围）----
 # 设为 None 表示不过滤，导入全部数据；设具体值则只导入该区域
-EARTHQUAKE_LON_MIN = 73.0
-EARTHQUAKE_LON_MAX = 135.0
-EARTHQUAKE_LAT_MIN = 18.0
-EARTHQUAKE_LAT_MAX = 54.0
+EARTHQUAKE_LON_MIN = None
+EARTHQUAKE_LON_MAX = None
+EARTHQUAKE_LAT_MIN = None
+EARTHQUAKE_LAT_MAX = None
 
 
 def connect():
@@ -325,11 +325,11 @@ def import_earthquake(conn):
                     (row.get('status') or '').strip(),
                     safe_int(row.get('tsunami'), 0) if row.get('tsunami') else 0,
                     (row.get('alert') or '').strip(),
-                    safe_int(row.get('significance'), 0),
+                    safe_int(row.get('magNst'), 0),
                     safe_float(row.get('horizontalError'), 0),
                     safe_float(row.get('depthError'), 0),
                     safe_float(row.get('magError'), 0),
-                    safe_int(row.get('magNst'), 0),
+                    safe_int(row.get('sig'), 0),
                     parse_iso_time(row.get('updated')),
                 ))
 
@@ -358,8 +358,8 @@ def _insert_eq_batch(cur, batch):
         cur.executemany("""
             INSERT INTO earthquake_info (event_id, date_time, latitude, longitude,
                 depth, magnitude, mag_type, nst, gap, dmin, rms, place, status,
-                tsunami, alert, significance,
-                horizontal_error, depth_error, mag_error, mag_nst, updated)
+                tsunami, alert, mag_nst,
+                horizontal_error, depth_error, mag_error, significance, updated)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
                     %s, %s, %s, %s, %s, %s)
             ON CONFLICT (event_id) DO NOTHING
@@ -373,8 +373,8 @@ def _insert_eq_batch(cur, batch):
                 cur.execute("""
                     INSERT INTO earthquake_info (event_id, date_time, latitude, longitude,
                         depth, magnitude, mag_type, nst, gap, dmin, rms, place, status,
-                        tsunami, alert, significance,
-                        horizontal_error, depth_error, mag_error, mag_nst, updated)
+                        tsunami, alert, mag_nst,
+                        horizontal_error, depth_error, mag_error, significance, updated)
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
                             %s, %s, %s, %s, %s, %s)
                     ON CONFLICT (event_id) DO NOTHING

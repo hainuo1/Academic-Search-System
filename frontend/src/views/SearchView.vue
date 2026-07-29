@@ -98,7 +98,7 @@
         </div>
       </div>
       <div class="flex items-center gap-3 mt-5 pt-4 border-t border-slate-100">
-        <button @click="doSearch(1)" class="px-5 py-2.5 bg-gradient-to-r from-slate-800 to-indigo-900 text-white text-sm font-medium rounded-xl transition-all hover:shadow-lg hover:-translate-y-0.5 flex items-center gap-2">
+        <button @click="applyFilter" class="px-5 py-2.5 bg-gradient-to-r from-slate-800 to-indigo-900 text-white text-sm font-medium rounded-xl transition-all hover:shadow-lg hover:-translate-y-0.5 flex items-center gap-2">
           <i class="fa fa-filter"></i> 应用筛选
         </button>
         <button @click="resetFilters" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-medium rounded-xl transition-all flex items-center gap-2">
@@ -275,6 +275,16 @@ async function doSearch(p) {
 function selectCategory(cat) {
   activeCategory.value = cat
   keyword.value = ''
+  // 清除所有高级筛选条件，互斥关系
+  titleFilter.value = ''; authorFilter.value = ''; categoryFilter.value = ''
+  keywordFilter.value = ''; fulltextFilter.value = ''
+  startDate.value = ''; endDate.value = ''
+  doSearch(1)
+}
+
+function applyFilter() {
+  // 应用高级筛选时，重置分类浏览到"全部"
+  activeCategory.value = ''
   doSearch(1)
 }
 
@@ -293,7 +303,8 @@ async function downloadPdf(docId) {
     const a = document.createElement('a')
     a.href = url
     const disp = r.headers['content-disposition']
-    a.download = disp ? decodeURIComponent(disp.split("filename*=UTF-8''")[1] || disp.split('filename=')[1] || 'document.pdf') : 'document.pdf'
+    const m = disp?.match(/filename\*=UTF-8''(.+)/i)
+    a.download = m ? decodeURIComponent(m[1]) : (disp?.split('filename=')[1]?.replace(/"/g,'') || 'document.pdf')
     document.body.appendChild(a); a.click(); document.body.removeChild(a); window.URL.revokeObjectURL(url)
   } catch (e) { console.error('下载失败:', e) }
 }

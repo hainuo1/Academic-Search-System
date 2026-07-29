@@ -79,8 +79,13 @@ def search(
 ):
     # 可用分类
     cats_rows = db.execute(text(
-        "SELECT DISTINCT category FROM documents WHERE category IS NOT NULL AND category != '' ORDER BY category"
+        "SELECT category_name FROM literature_categories ORDER BY sort_order, category_name"
     )).fetchall()
+    if not cats_rows:
+        # fallback: 从 documents 表获取已有分类
+        cats_rows = db.execute(text(
+            "SELECT DISTINCT category FROM documents WHERE category IS NOT NULL AND category != '' ORDER BY category"
+        )).fetchall()
     all_cats = [r[0] for r in cats_rows]
 
     # 普通筛选条件
@@ -89,8 +94,11 @@ def search(
 
     ec = category or category_filter
     if ec:
-        base_where += " AND d.category = :cat"
+        base_where += " AND (d.category = :cat OR d.category LIKE :cat_start OR d.category LIKE :cat_mid OR d.category LIKE :cat_end)"
         base_params["cat"] = ec
+        base_params["cat_start"] = f"{ec},%"
+        base_params["cat_mid"] = f"%,{ec},%"
+        base_params["cat_end"] = f"%,{ec}"
     if title:
         base_where += " AND d.title ILIKE :tf"
         base_params["tf"] = f"%{title}%"

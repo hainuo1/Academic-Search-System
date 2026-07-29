@@ -128,16 +128,21 @@
             class="px-4 py-2 rounded-xl text-sm font-medium transition-all">
             <i :class="opt.icon" class="mr-1.5"></i>{{ opt.label }}
           </button>
+          <div class="flex-1"></div>
+          <button @click="clearCache" :disabled="aiLoading"
+            class="px-4 py-2 bg-red-50 border border-red-200 text-red-500 rounded-xl text-sm font-medium hover:bg-red-100 transition-colors disabled:opacity-50 flex items-center gap-1.5">
+            <i class="fa fa-trash-o"></i>清理缓存
+          </button>
           <button @click="runAIAnalysis"
             :disabled="aiLoading"
-            class="ml-auto px-6 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl text-sm font-medium hover:shadow-lg hover:shadow-purple-600/20 transition-all disabled:opacity-60 flex items-center gap-2">
+            class="px-6 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl text-sm font-medium hover:shadow-lg hover:shadow-purple-600/20 transition-all disabled:opacity-60 flex items-center gap-2">
             <i :class="aiLoading ? 'fa fa-spinner fa-spin' : 'fa fa-play'"></i>
             {{ aiLoading ? 'AI 分析中...' : '开始分析' }}
           </button>
         </div>
         <div v-if="aiResult" class="bg-slate-50 rounded-xl p-5 border border-slate-100">
-          <div v-if="aiCached" class="text-xs text-slate-400 mb-2 flex items-center gap-1">
-            <i class="fa fa-database"></i> 缓存结果（首次生成后永久复用）
+          <div v-if="aiCached" class="text-center text-xs text-amber-500 font-medium mb-3 bg-amber-50 rounded-lg py-1.5">
+            <i class="fa fa-info-circle mr-1"></i>当前回答由缓存生成
           </div>
           <div class="text-slate-700 text-sm whitespace-pre-wrap leading-relaxed">{{ aiResult }}</div>
         </div>
@@ -421,7 +426,7 @@ function drawChart() {
   ctx.font = '11px -apple-system, sans-serif'
   ctx.textAlign = 'left'
   ctx.fillText(
-    `数据来源：NOAA SPC · ${detail.province || '同州'}及周边 · 共 ${nearby.value.length + (detail.ef_scale ? 1 : 0)} 条记录`,
+    `数据来源：NOAA SPC · ${detail.province || '同州'}及周边`,
     pad.left + 2, H - 42
   )
 }
@@ -450,6 +455,13 @@ async function runAIAnalysis() {
   } catch (e) {
     aiResult.value = 'AI 分析请求失败，请检查网络连接后重试'
   } finally { aiLoading.value = false }
+}
+
+async function clearCache() {
+  try {
+    await api.delete('/api/tornado/ai_cache', {data: {event_id: eventId, analysis_type: selectedAnalysis.value}});
+    aiResult.value = ''; aiCached.value = false;
+  } catch (e) { console.error(e); }
 }
 
 // ═══ 数据加载 ═════════════════════════════════════════

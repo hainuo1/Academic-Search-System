@@ -8,7 +8,7 @@
             <div class="w-9 h-9 bg-gradient-to-br from-slate-800 to-indigo-900 rounded-xl flex items-center justify-center group-hover:shadow-lg group-hover:shadow-indigo-900/20 transition-all">
               <i class="fa fa-cloud text-white text-sm"></i>
             </div>
-            <span class="text-lg font-bold text-slate-800 tracking-tight">气象科学研究数据平台 v6.0</span>
+            <span class="text-lg font-bold text-slate-800 tracking-tight">气象科学研究数据平台 v6.1</span>
           </router-link>
         </div>
         <div class="hidden md:flex items-center gap-1">
@@ -36,7 +36,7 @@
 
   <footer v-if="auth.isLoggedIn" class="bg-slate-900 text-white py-8 mt-16">
     <div class="max-w-7xl mx-auto px-4 text-center">
-      <p class="text-slate-400 mb-1.5">&copy; 2026 南京农业大学 · 气象科学研究数据平台 v6.0</p>
+      <p class="text-slate-400 mb-1.5">&copy; 2026 南京农业大学 · 气象科学研究数据平台 v6.1</p>
       <p class="text-slate-500 text-sm">丁俊杰 · <a href="mailto:hainuo@stu.njau.edu.cn" class="hover:text-indigo-400 transition-colors">hainuo@stu.njau.edu.cn</a></p>
     </div>
   </footer>

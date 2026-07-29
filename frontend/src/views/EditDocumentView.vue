@@ -31,7 +31,20 @@
       </div>
       <div class="mb-6">
         <label class="block mb-2 font-medium text-slate-700 text-sm">分类 <span class="text-red-500">*</span></label>
-        <input v-model="c" type="text" placeholder="例如：人工智能、数据库、信息检索" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-indigo-400 focus:ring-4 focus:ring-indigo-50 transition-all outline-none">
+        <div v-if="selectedCategoryNames" class="flex flex-wrap gap-1.5 mb-2">
+          <span v-for="cn in selectedCategoryNames" :key="cn"
+            class="bg-indigo-50 text-indigo-600 px-2.5 py-0.5 rounded-lg text-xs font-medium inline-flex items-center gap-1">
+            {{ cn }}
+            <i class="fa fa-times cursor-pointer hover:text-indigo-800" @click="removeCategory(cn)"></i>
+          </span>
+        </div>
+        <button type="button" @click="goToCategorySelect"
+          class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm hover:bg-indigo-50 hover:border-indigo-300 transition-all text-left flex items-center justify-between">
+          <span :class="selectedCategoryNames ? 'text-slate-800' : 'text-slate-400'">
+            {{ selectedCategoryNames ? selectedCategoryNames.join(', ') : '点击选择分类标签...' }}
+          </span>
+          <i class="fa fa-tags text-indigo-400"></i>
+        </button>
       </div>
       <div class="mb-6">
         <label class="block mb-2 font-medium text-slate-700 text-sm">发表日期 <span class="text-red-500">*</span></label>
@@ -61,7 +74,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useFlashStore } from '../stores/flash'
 import api from '../api'
@@ -70,19 +83,74 @@ const route = useRoute(); const router = useRouter(); const flash = useFlashStor
 const t = ref(''); const a = ref(''); const c = ref(''); const pd = ref(''); const kw = ref(''); const ab = ref('')
 const err = ref(''); const loading = ref(true); const ld = ref(false)
 
+const DRAFT_KEY = 'edit_draft'
+
+const selectedCategoryNames = computed(() => {
+  return c.value ? c.value.split(',').map(s => s.trim()).filter(Boolean) : null
+})
+
+function saveDraft() {
+  sessionStorage.setItem(DRAFT_KEY, JSON.stringify({
+    title: t.value, author: a.value, category: c.value,
+    publishDate: pd.value, keywords: kw.value, abstract: ab.value,
+    docId: route.params.id,
+  }))
+}
+
+function clearDraft() {
+  sessionStorage.removeItem(DRAFT_KEY)
+}
+
 onMounted(async () => {
+  const fromCategory = !!route.query.categories
+  if (fromCategory) {
+    // 从分类选择页返回，优先恢复草稿中的表单数据
+    const raw = sessionStorage.getItem(DRAFT_KEY)
+    if (raw) {
+      try {
+        const draft = JSON.parse(raw)
+        if (draft.docId === route.params.id || draft.docId === String(route.params.id)) {
+          t.value = draft.title || ''
+          a.value = draft.author || ''
+          pd.value = draft.publishDate || ''
+          kw.value = draft.keywords || ''
+          ab.value = draft.abstract || ''
+        }
+      } catch (e) { /* ignore */ }
+    }
+    c.value = route.query.categories
+    loading.value = false
+    return
+  }
+
+  // 首次进入：从后端加载
   try {
     const r = await api.get(`/api/document/${route.params.id}/edit-data`)
-    if (r.data.code === 200) { const d = r.data.data.document; t.value = d.title; a.value = d.author; c.value = d.category; pd.value = d.publish_date; kw.value = d.keywords; ab.value = d.abstract }
-    else err.value = '加载文献信息失败'
+    if (r.data.code === 200) {
+      const d = r.data.data.document
+      t.value = d.title; a.value = d.author; c.value = d.category
+      pd.value = d.publish_date; kw.value = d.keywords; ab.value = d.abstract
+    } else {
+      err.value = '加载文献信息失败'
+    }
   } catch (e) { err.value = '加载文献信息失败' } finally { loading.value = false }
 })
+
+function goToCategorySelect() {
+  saveDraft()
+  router.push({ path: '/select_category', query: { returnTo: 'edit', docId: route.params.id, selected: c.value } })
+}
+
+function removeCategory(name) {
+  const names = c.value.split(',').map(s => s.trim()).filter(s => s && s !== name)
+  c.value = names.join(',')
+}
 
 async function go() {
   err.value = ''; ld.value = true
   try {
     const r = await api.put(`/api/document/${route.params.id}`, { title: t.value, author: a.value, category: c.value, publish_date: pd.value, keywords: kw.value, abstract: ab.value })
-    if (r.data.code === 200) { flash.show('修改保存成功', 'success'); router.push('/my_documents') }
+    if (r.data.code === 200) { clearDraft(); flash.show('修改保存成功', 'success'); router.push('/my_documents') }
     else err.value = r.data.message
   } catch (e) { err.value = e.response?.data?.message || '保存失败' } finally { ld.value = false }
 }

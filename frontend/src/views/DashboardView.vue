@@ -47,38 +47,38 @@
           </div>
         </router-link>
 
-        <!-- 功能入口 -->
+        <!-- 功能入口（不可点击，仅作展示） -->
         <div class="flex flex-col gap-3">
-          <router-link to="/typhoon"
-            class="group bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:border-cyan-200 transition-all duration-300 p-4 flex items-center gap-4 transform hover:-translate-y-0.5">
-            <div class="w-11 h-11 bg-gradient-to-br from-cyan-100 to-blue-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
+          <div
+            class="group bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex items-center gap-4 transition-all duration-300">
+            <div class="w-11 h-11 bg-gradient-to-br from-cyan-100 to-blue-100 rounded-xl flex items-center justify-center shrink-0">
               <i class="fa fa-map text-cyan-600 text-lg"></i>
             </div>
             <div>
               <h4 class="text-sm font-semibold text-slate-700">路径可视化</h4>
               <p class="text-xs text-slate-400">交互地图 · 轨迹回放</p>
             </div>
-          </router-link>
-          <router-link to="/typhoon"
-            class="group bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:border-cyan-200 transition-all duration-300 p-4 flex items-center gap-4 transform hover:-translate-y-0.5">
-            <div class="w-11 h-11 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
+          </div>
+          <div
+            class="group bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex items-center gap-4 transition-all duration-300">
+            <div class="w-11 h-11 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl flex items-center justify-center shrink-0">
               <i class="fa fa-magic text-blue-600 text-lg"></i>
             </div>
             <div>
               <h4 class="text-sm font-semibold text-slate-700">AI 智能解读</h4>
               <p class="text-xs text-slate-400">强度分析 · 路径预测</p>
             </div>
-          </router-link>
-          <router-link to="/typhoon"
-            class="group bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:border-cyan-200 transition-all duration-300 p-4 flex items-center gap-4 transform hover:-translate-y-0.5">
-            <div class="w-11 h-11 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
+          </div>
+          <div
+            class="group bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex items-center gap-4 transition-all duration-300">
+            <div class="w-11 h-11 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-xl flex items-center justify-center shrink-0">
               <i class="fa fa-bar-chart text-indigo-600 text-lg"></i>
             </div>
             <div>
               <h4 class="text-sm font-semibold text-slate-700">统计分析</h4>
               <p class="text-xs text-slate-400">频次 · 强度 · 趋势</p>
             </div>
-          </router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -115,38 +115,38 @@
           </div>
         </router-link>
 
-        <!-- 功能入口 -->
+        <!-- 功能入口（不可点击，仅作展示） -->
         <div class="flex flex-col gap-3">
-          <router-link to="/tornado"
-            class="group bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:border-teal-200 transition-all duration-300 p-4 flex items-center gap-4 transform hover:-translate-y-0.5">
-            <div class="w-11 h-11 bg-gradient-to-br from-teal-100 to-emerald-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
+          <div
+            class="group bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex items-center gap-4 transition-all duration-300">
+            <div class="w-11 h-11 bg-gradient-to-br from-teal-100 to-emerald-100 rounded-xl flex items-center justify-center shrink-0">
               <i class="fa fa-list-ol text-teal-600 text-lg"></i>
             </div>
             <div>
               <h4 class="text-sm font-semibold text-slate-700">EF 等级分析</h4>
               <p class="text-xs text-slate-400">强度分级 · 频次统计</p>
             </div>
-          </router-link>
-          <router-link to="/tornado"
-            class="group bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:border-teal-200 transition-all duration-300 p-4 flex items-center gap-4 transform hover:-translate-y-0.5">
-            <div class="w-11 h-11 bg-gradient-to-br from-emerald-100 to-green-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
+          </div>
+          <div
+            class="group bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex items-center gap-4 transition-all duration-300">
+            <div class="w-11 h-11 bg-gradient-to-br from-emerald-100 to-green-100 rounded-xl flex items-center justify-center shrink-0">
               <i class="fa fa-map-marker text-emerald-600 text-lg"></i>
             </div>
             <div>
               <h4 class="text-sm font-semibold text-slate-700">地理分布</h4>
               <p class="text-xs text-slate-400">空间密度 · 热点区域</p>
             </div>
-          </router-link>
-          <router-link to="/tornado"
-            class="group bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:border-teal-200 transition-all duration-300 p-4 flex items-center gap-4 transform hover:-translate-y-0.5">
-            <div class="w-11 h-11 bg-gradient-to-br from-green-100 to-lime-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
+          </div>
+          <div
+            class="group bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex items-center gap-4 transition-all duration-300">
+            <div class="w-11 h-11 bg-gradient-to-br from-green-100 to-lime-100 rounded-xl flex items-center justify-center shrink-0">
               <i class="fa fa-magic text-green-600 text-lg"></i>
             </div>
             <div>
               <h4 class="text-sm font-semibold text-slate-700">AI 科学解读</h4>
               <p class="text-xs text-slate-400">成因分析 · 趋势研判</p>
             </div>
-          </router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -185,38 +185,38 @@
           </div>
         </router-link>
 
-        <!-- 功能入口 -->
+        <!-- 功能入口（不可点击，仅作展示） -->
         <div class="flex flex-col gap-3">
-          <router-link to="/earthquake"
-            class="group bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:border-amber-200 transition-all duration-300 p-4 flex items-center gap-4 transform hover:-translate-y-0.5">
-            <div class="w-11 h-11 bg-gradient-to-br from-amber-100 to-orange-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
+          <div
+            class="group bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex items-center gap-4 transition-all duration-300">
+            <div class="w-11 h-11 bg-gradient-to-br from-amber-100 to-orange-100 rounded-xl flex items-center justify-center shrink-0">
               <i class="fa fa-globe text-amber-600 text-lg"></i>
             </div>
             <div>
               <h4 class="text-sm font-semibold text-slate-700">空间密度分析</h4>
               <p class="text-xs text-slate-400">PostGIS · 邻近事件</p>
             </div>
-          </router-link>
-          <router-link to="/earthquake"
-            class="group bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:border-amber-200 transition-all duration-300 p-4 flex items-center gap-4 transform hover:-translate-y-0.5">
-            <div class="w-11 h-11 bg-gradient-to-br from-orange-100 to-red-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
+          </div>
+          <div
+            class="group bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex items-center gap-4 transition-all duration-300">
+            <div class="w-11 h-11 bg-gradient-to-br from-orange-100 to-red-100 rounded-xl flex items-center justify-center shrink-0">
               <i class="fa fa-line-chart text-orange-600 text-lg"></i>
             </div>
             <div>
               <h4 class="text-sm font-semibold text-slate-700">活动趋势</h4>
               <p class="text-xs text-slate-400">时间序列 · 区域对比</p>
             </div>
-          </router-link>
-          <router-link to="/earthquake"
-            class="group bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:border-amber-200 transition-all duration-300 p-4 flex items-center gap-4 transform hover:-translate-y-0.5">
-            <div class="w-11 h-11 bg-gradient-to-br from-red-100 to-rose-100 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
+          </div>
+          <div
+            class="group bg-white rounded-2xl border border-slate-100 shadow-sm p-4 flex items-center gap-4 transition-all duration-300">
+            <div class="w-11 h-11 bg-gradient-to-br from-red-100 to-rose-100 rounded-xl flex items-center justify-center shrink-0">
               <i class="fa fa-magic text-red-600 text-lg"></i>
             </div>
             <div>
               <h4 class="text-sm font-semibold text-slate-700">AI 风险评估</h4>
               <p class="text-xs text-slate-400">DeepSeek · 科学解读</p>
             </div>
-          </router-link>
+          </div>
         </div>
       </div>
     </div>

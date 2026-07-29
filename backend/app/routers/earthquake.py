@@ -46,14 +46,14 @@ def earthquake_list(
     off = (page - 1) * pp
 
     rows = db.execute(text(
-        f"SELECT event_id, date_time, latitude, longitude, depth, magnitude, mag_type, place, nst "
+        f"SELECT event_id, date_time, latitude, longitude, depth, magnitude, mag_type, place, nst, mag_nst "
         f"FROM earthquake_info {where} ORDER BY magnitude DESC, date_time DESC LIMIT :lim OFFSET :off"
     ), {**params, "lim": pp, "off": off}).fetchall()
 
     quakes = [
         {"event_id": r.event_id, "datetime": r.date_time.strftime("%Y-%m-%d %H:%M:%S") if r.date_time else "",
          "latitude": r.latitude, "longitude": r.longitude, "depth": r.depth, "magnitude": r.magnitude,
-         "mag_type": r.mag_type, "place": r.place, "nst": r.nst}
+         "mag_type": r.mag_type, "place": r.place, "nst": r.nst, "mag_nst": r.mag_nst or 0}
         for r in rows
     ]
 
@@ -77,20 +77,31 @@ def earthquake_detail(event_id: str, current_user: dict = Depends(get_current_us
         "event_id": row.event_id, "datetime": row.date_time.strftime("%Y-%m-%d %H:%M:%S") if row.date_time else "",
         "latitude": row.latitude, "longitude": row.longitude, "depth": row.depth, "magnitude": row.magnitude,
         "mag_type": row.mag_type, "place": row.place, "status": row.status, "tsunami": row.tsunami,
-        "alert": row.alert, "gap": row.gap, "dmin": row.dmin,
-        "rms": row.rms, "nst": row.nst, "horizontal_error": row.horizontal_error,
-        "depth_error": row.depth_error, "mag_error": row.mag_error, "mag_nst": row.mag_nst,
+        "alert": row.alert,
+        "gap": row.gap, "dmin": row.dmin,
+        "rms": row.rms, "nst": row.nst or 0, "mag_nst": row.mag_nst or 0,
+        "horizontal_error": row.horizontal_error, "depth_error": row.depth_error,
+        "mag_error": row.mag_error,
     }
 
-    nearby_rows = db.execute(text(
-        "SELECT date_time, magnitude, depth, place, horizontal_error, nst FROM earthquake_info "
-        "WHERE ABS(latitude - :lat) < 3 AND ABS(longitude - :lon) < 3 AND event_id != :eid ORDER BY date_time DESC LIMIT 30"
-    ), {"lat": row.latitude, "lon": row.longitude, "eid": event_id}).fetchall()
-    nearby = [
-        {"datetime": r.date_time.strftime("%Y-%m-%d %H:%M:%S") if r.date_time else "",
-         "magnitude": r.magnitude, "depth": r.depth, "place": r.place, "horizontal_error": r.horizontal_error or 0, "nst": r.nst or 0}
-        for r in nearby_rows
-    ]
+    # 取全部邻近地震，当前事件居中
+    nearby_before = db.execute(text(
+        "SELECT date_time, magnitude, depth, place, horizontal_error FROM earthquake_info "
+        "WHERE ABS(latitude - :lat) < 3 AND ABS(longitude - :lon) < 3 AND event_id != :eid AND date_time <= :dt "
+        "ORDER BY date_time DESC"
+    ), {"lat": row.latitude, "lon": row.longitude, "eid": event_id, "dt": row.date_time}).fetchall()
+    nearby_after = db.execute(text(
+        "SELECT date_time, magnitude, depth, place, horizontal_error FROM earthquake_info "
+        "WHERE ABS(latitude - :lat) < 3 AND ABS(longitude - :lon) < 3 AND event_id != :eid AND date_time > :dt "
+        "ORDER BY date_time ASC"
+    ), {"lat": row.latitude, "lon": row.longitude, "eid": event_id, "dt": row.date_time}).fetchall()
+
+    def _to_nearby(r):
+        return {"datetime": r.date_time.strftime("%Y-%m-%d %H:%M:%S") if r.date_time else "",
+                "magnitude": r.magnitude, "depth": r.depth, "place": r.place,
+                "horizontal_error": r.horizontal_error or 0}
+
+    nearby = [_to_nearby(r) for r in reversed(nearby_before)] + [_to_nearby(r) for r in nearby_after]
 
     # PostGIS 空间密度分析：300km 范围内统计（geography 类型确保真实公里）
     spatial_stats = None
@@ -179,3 +190,22 @@ def ai_analysis(body: dict, current_user: dict = Depends(get_current_user), db: 
     ), {"eid": event_id, "at": at, "ct": ai_text})
     db.commit()
     return {"code": 200, "message": "AI 分析完成", "data": {"analysis_type": at, "content": ai_text, "cached": False}}
+
+
+@router.delete("/ai_cache")
+def clear_ai_cache(body: dict, current_user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
+    """删除指定地震事件的 AI 分析缓存"""
+    event_id = body.get("event_id", "").strip()
+    at = body.get("analysis_type", "").strip()
+    if not event_id:
+        raise HTTPException(status_code=400, detail="缺少 event_id")
+    if at:
+        db.execute(text(
+            "DELETE FROM earthquake_ai_analysis WHERE event_id = :eid AND analysis_type = :at"
+        ), {"eid": event_id, "at": at})
+    else:
+        db.execute(text(
+            "DELETE FROM earthquake_ai_analysis WHERE event_id = :eid"
+        ), {"eid": event_id})
+    db.commit()
+    return {"code": 200, "message": "缓存已清理", "data": None}

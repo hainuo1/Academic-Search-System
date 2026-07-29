@@ -1,5 +1,5 @@
 """
-SQLAlchemy 2.0 ORM Models — 全部 17 张表
+SQLAlchemy 2.0 ORM Models — 全部 18 张表
 """
 from datetime import datetime
 from sqlalchemy import (
@@ -61,6 +61,16 @@ class Document(Base):
     citations_as_target = relationship("Citation", foreign_keys="Citation.target_document_id", back_populates="target_doc")
     favorites      = relationship("Favorite", back_populates="document")
     browse_history = relationship("BrowseHistory", back_populates="document")
+
+
+class LiteratureCategory(Base):
+    """文献分类标签表 —— 预定义分类，上传时从列表中选择"""
+    __tablename__ = "literature_categories"
+
+    category_id   = Column(Integer, primary_key=True, autoincrement=True)
+    category_name = Column(String(100), nullable=False, unique=True)
+    sort_order    = Column(Integer, default=0)
+    created_at    = Column(DateTime, default=datetime.utcnow)
 
 
 class Keyword(Base):

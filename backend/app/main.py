@@ -1,5 +1,5 @@
 """
-FastAPI 主应用入口 —— 气象科学研究数据平台 v6.0
+FastAPI 主应用入口 —— 气象科学研究数据平台 v6.1
 启动方式：uvicorn app.main:app --reload --host 0.0.0.0 --port 5000
 """
 import os
@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.core.config import settings
-from app.routers import auth, search, document, favorites, citation, profile, stats, typhoon, earthquake, tornado
+from app.routers import auth, search, document, favorites, citation, profile, stats, typhoon, earthquake, tornado, category
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -25,6 +25,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["Content-Disposition"],
 )
 
 # 确保上传目录存在
@@ -41,6 +42,7 @@ app.include_router(stats.router)
 app.include_router(typhoon.router)
 app.include_router(earthquake.router)
 app.include_router(tornado.router)
+app.include_router(category.router)
 
 
 @app.exception_handler(404)

@@ -7,7 +7,10 @@
         <i class="fa fa-warning text-amber-400"></i>地震监测分析
       </h1>
       <p class="text-slate-300 mt-2 ml-1">
-        全球地震数据 · 震级深度分析 · AI 科学解读
+        东亚及周边区域地震数据 · 震级深度分析 · AI 科学解读
+        <span class="ml-4 inline-flex items-center gap-1.5 px-3 py-0.5 bg-white/10 rounded-full text-xs text-blue-200/80 border border-white/10">
+          <i class="fa fa-map-marker"></i>数据范围：东亚及周边（18°–54°N, 73°–135°E）
+        </span>
       </p>
     </div>
   </div>
@@ -96,8 +99,8 @@
             <div class="text-[10px] text-slate-400">震级类型</div>
           </div>
           <div class="text-center">
-            <div class="text-lg font-bold text-slate-700">{{ q.nst || '-' }}</div>
-            <div class="text-[10px] text-slate-400">台站数</div>
+            <div class="text-lg font-bold text-slate-700">{{ q.nst || '未记录' }}</div>
+            <div class="text-[10px] text-slate-400">定位台站</div>
           </div>
         </div>
 
@@ -178,5 +181,5 @@ function resetFilters() { filters.keyword = ''; filters.year = ''; filters.minMa
 function goPage(p) { if (p < 1 || p > totalPages.value) return; page.value = p; fetchQuakes(); window.scrollTo({ top: 0, behavior: 'smooth' }) }
 function goDetail(id) { router.push(`/earthquake/${id}`) }
 
-onMounted(() => { fetchQuakes(); window.scrollTo({ top: 0, behavior: 'instant' }); })
+onMounted(() => { fetchQuakes() })
 </script>

@@ -9,6 +9,7 @@ const routes = [
   { path: '/register', name: 'register', component: () => import('../views/RegisterView.vue') },
   { path: '/forgot_password', name: 'forgot_password', component: () => import('../views/ForgotPasswordView.vue') },
   { path: '/upload', name: 'upload', component: () => import('../views/UploadView.vue') },
+  { path: '/select_category', name: 'select_category', component: () => import('../views/CategorySelectView.vue') },
   { path: '/my_documents', name: 'my_documents', component: () => import('../views/MyDocumentsView.vue') },
   { path: '/edit_document/:id', name: 'edit_document', component: () => import('../views/EditDocumentView.vue') },
   { path: '/favorites', name: 'favorites', component: () => import('../views/FavoritesView.vue') },

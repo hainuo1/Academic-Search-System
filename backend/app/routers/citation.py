@@ -18,7 +18,16 @@ def get_cit(did: int, current_user: dict = Depends(get_current_user), db: Sessio
     if d.upload_user_id != current_user["user_id"]:
         raise HTTPException(status_code=403, detail="你没有权限设置此文献的引用关系")
     sids = db.execute(text("SELECT target_document_id FROM citation WHERE source_document_id = :did"), {"did": did}).fetchall()
-    return {"code": 200, "message": "ok", "data": {"current_doc": {"id": d.document_id, "title": d.title}, "selected_ids": [r[0] for r in sids]}}
+    existing_ids = [r[0] for r in sids]
+    existing_docs = []
+    if existing_ids:
+        ph = ",".join([f":cid{i}" for i in range(len(existing_ids))])
+        params = {f"cid{i}": existing_ids[i] for i in range(len(existing_ids))}
+        rows = db.execute(text(
+            f"SELECT document_id, title, author FROM documents WHERE document_id IN ({ph}) ORDER BY document_id DESC"
+        ), params).fetchall()
+        existing_docs = [{"id": r[0], "title": r[1], "author": r[2]} for r in rows]
+    return {"code": 200, "message": "ok", "data": {"current_doc": {"id": d.document_id, "title": d.title}, "selected_ids": existing_ids, "existing_docs": existing_docs}}
 
 
 @router.get("/search_citation")

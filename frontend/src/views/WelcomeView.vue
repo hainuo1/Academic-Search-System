@@ -8,7 +8,7 @@
       <div class="absolute bottom-0 right-1/4 w-[400px] h-[250px] bg-indigo-500/10 rounded-full blur-[100px] animate-float-delay"></div>
     </div>
     <div class="relative z-10 max-w-3xl mx-auto px-6 text-center text-white">
-      <div class="inline-flex items-center gap-2 px-5 py-2 mb-10 bg-white/8 backdrop-blur-md rounded-full text-sm font-light tracking-wide border border-white/10 text-blue-200/80"><span class="text-cyan-400/70">◆</span> 南京农业大学 · 气象科学研究数据平台 v6.0</div>
+      <div class="inline-flex items-center gap-2 px-5 py-2 mb-10 bg-white/8 backdrop-blur-md rounded-full text-sm font-light tracking-wide border border-white/10 text-blue-200/80"><span class="text-cyan-400/70">◆</span> 南京农业大学 · 气象科学研究数据平台 v6.1</div>
       <div class="mb-8"><div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 shadow-[0_0_60px_rgba(34,211,238,0.15)]"><i class="fa fa-globe text-4xl text-cyan-300/80"></i></div></div>
       <h1 class="text-4xl md:text-5xl lg:text-6xl font-light mb-6 leading-tight tracking-wide"><span class="bg-gradient-to-r from-cyan-200 via-blue-200 to-indigo-200 bg-clip-text text-transparent">气象科学研究数据平台</span></h1>
       <p class="text-lg md:text-xl text-blue-200/60 mb-4 font-light tracking-wider">热带气旋 · 龙卷风 · 地震监测 · 学术文献检索</p>
@@ -32,7 +32,7 @@
       </div>
     </div>
   </section>
-  <footer class="bg-slate-900 text-white py-12"><div class="max-w-7xl mx-auto px-4 text-center"><div class="flex items-center justify-center gap-2 mb-3 text-slate-500"><i class="fa fa-cloud text-xs"></i><span class="text-xs tracking-wide">气象科学研究数据平台 v6.0</span></div><p class="text-slate-500 text-xs mb-1">&copy; 2026 南京农业大学 · 信息与计算科学专业</p><p class="text-slate-600 text-xs">丁俊杰 · hainuo@stu.njau.edu.cn</p></div></footer>
+  <footer class="bg-slate-900 text-white py-12"><div class="max-w-7xl mx-auto px-4 text-center"><div class="flex items-center justify-center gap-2 mb-3 text-slate-500"><i class="fa fa-cloud text-xs"></i><span class="text-xs tracking-wide">气象科学研究数据平台 v6.1</span></div><p class="text-slate-500 text-xs mb-1">&copy; 2026 南京农业大学 · 信息与计算科学专业</p><p class="text-slate-600 text-xs">丁俊杰 · hainuo@stu.njau.edu.cn</p></div></footer>
 </div>
 </template>
 <script setup></script>

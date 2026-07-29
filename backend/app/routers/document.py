@@ -1,7 +1,7 @@
 """
 文献操作路由 —— 详情 / 上传 / 下载 / 我的文献 / 删除 / 编辑
 """
-import os, uuid
+import os, re, uuid
 import pdfplumber
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from fastapi.responses import FileResponse
@@ -68,11 +68,18 @@ def detail(did: int, current_user: dict = Depends(get_current_user), db: Session
     ), {"did": did}).fetchall()
     kws = [r[0] for r in kw_rows]
 
-    # 引用
-    cit_rows = db.execute(text(
-        "SELECT d.document_id, d.title FROM citation c JOIN documents d ON c.source_document_id = d.document_id WHERE c.target_document_id = :did"
+    # 引用 —— 两个方向都要查
+    # 被哪些文献引用（当前文献是 target）
+    cited_by_rows = db.execute(text(
+        "SELECT d.document_id, d.title FROM citation c JOIN documents d ON c.source_document_id = d.document_id WHERE c.target_document_id = :did ORDER BY d.document_id DESC LIMIT 20"
     ), {"did": did}).fetchall()
-    cits = [{"id": r[0], "title": r[1]} for r in cit_rows]
+    cited_by = [{"id": r[0], "title": r[1]} for r in cited_by_rows]
+
+    # 引用了哪些文献（当前文献是 source）
+    cites_rows = db.execute(text(
+        "SELECT d.document_id, d.title FROM citation c JOIN documents d ON c.target_document_id = d.document_id WHERE c.source_document_id = :did ORDER BY d.document_id DESC LIMIT 20"
+    ), {"did": did}).fetchall()
+    cites = [{"id": r[0], "title": r[1]} for r in cites_rows]
 
     # 是否已收藏
     fav = db.execute(text(
@@ -86,7 +93,9 @@ def detail(did: int, current_user: dict = Depends(get_current_user), db: Session
             "category": doc.category or "", "file_path": doc.file_path or "",
             "view_count": doc.view_count, "download_count": doc.download_count,
         },
-        "keywords": kws, "citations": cits, "citation_count": len(cits),
+        "keywords": kws,
+        "citations": cited_by, "cites": cites,
+        "cited_by_count": len(cited_by), "cites_count": len(cites),
         "is_favorited": fav is not None,
     }}
 
@@ -151,7 +160,7 @@ def upload(
 # ── 下载 ──────────────────────────────────────────────
 @router.get("/download/{did}")
 def download(did: int, current_user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
-    d = db.execute(text("SELECT file_path, title FROM documents WHERE document_id = :did"), {"did": did}).fetchone()
+    d = db.execute(text("SELECT file_path, title, author FROM documents WHERE document_id = :did"), {"did": did}).fetchone()
     if not d:
         raise HTTPException(status_code=404, detail="文献不存在")
     if not d.file_path:
@@ -163,7 +172,8 @@ def download(did: int, current_user: dict = Depends(get_current_user), db: Sessi
 
     db.execute(text("UPDATE documents SET download_count = download_count + 1 WHERE document_id = :did"), {"did": did})
     db.commit()
-    return FileResponse(ap, filename=f"{d.title}.pdf", media_type="application/pdf")
+    safe_name = re.sub(r'[\\/:*?"<>|]', '_', f"{d.title}-{d.author}")
+    return FileResponse(ap, filename=f"{safe_name}.pdf", media_type="application/pdf")
 
 
 @router.get("/download/{did}/check")

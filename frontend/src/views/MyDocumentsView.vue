@@ -116,8 +116,8 @@ async function downloadPdf(docId) {
     const disposition = resp.headers['content-disposition']
     let filename = 'document.pdf'
     if (disposition) {
-      const match = disposition.match(/filename="?(.+)"?/)
-      if (match) filename = decodeURIComponent(match[1])
+      const m = disposition?.match(/filename\*=UTF-8''(.+)/i)
+    filename = m ? decodeURIComponent(m[1]) : (disposition?.match(/filename="?(.+)"?/)?.[1] || 'document.pdf')
     }
     link.setAttribute('download', filename)
     document.body.appendChild(link)

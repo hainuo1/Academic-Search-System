@@ -186,15 +186,18 @@ def ai_analysis(body: dict, current_user: dict = Depends(get_current_user), db: 
     if not info:
         raise HTTPException(status_code=404, detail="台风不存在")
 
+    pval = '无记录' if (info.min_pressure is None or info.min_pressure >= 9999) else f'{info.min_pressure}hPa'
+    wval = '无记录' if (info.max_wind is None or info.max_wind <= 0) else f'{info.max_wind}kts'
+    note = '。注意：数值标记为"无记录"表示该观测数据缺失，请不要将缺失值当作真实数据使用'
     prompts = {
         "trend": ("你是气象学家。请用100-150字的中文回复。",
-                   f"台风：{info.typhoon_name}（{info.season}年），最大风速{info.max_wind}kts，最低气压{info.min_pressure}hPa。分析路径走向与强度演变特征。"),
+                   f"台风：{info.typhoon_name}（{info.season}年），最大风速{wval}，最低气压{pval}{note}。分析路径走向与强度演变特征。"),
         "compare": ("你是台风气候学家。请用100-150字的中文回复。",
-                     f"台风：{info.typhoon_name}（{info.season}年），最大风速{info.max_wind}kts，最低气压{info.min_pressure}hPa。对比历史上相似台风的异同。"),
+                     f"台风：{info.typhoon_name}（{info.season}年），最大风速{wval}，最低气压{pval}{note}。对比历史上相似台风的异同。"),
         "impact": ("你是气象灾害评估专家。请用100-150字的中文回复。",
-                    f"台风：{info.typhoon_name}（{info.season}年），最大风速{info.max_wind}kts，最低气压{info.min_pressure}hPa。评估潜在影响。"),
+                    f"台风：{info.typhoon_name}（{info.season}年），最大风速{wval}，最低气压{pval}{note}。评估潜在影响。"),
         "travel": ("你是气象安全顾问。请用100-150字的中文回复。",
-                    f"台风：{info.typhoon_name}（{info.season}年），最大风速{info.max_wind}kts，最低气压{info.min_pressure}hPa。给出出行建议。"),
+                    f"台风：{info.typhoon_name}（{info.season}年），最大风速{wval}，最低气压{pval}{note}。给出出行建议。"),
     }
     sp, up = prompts.get(analysis_type, prompts["trend"])
     ai_text = call_deepseek(sp, up)
@@ -207,3 +210,17 @@ def ai_analysis(body: dict, current_user: dict = Depends(get_current_user), db: 
     ), {"tid": typhoon_id, "at": analysis_type, "ct": ai_text})
     db.commit()
     return {"code": 200, "message": "AI 分析完成", "data": {"analysis_type": analysis_type, "typhoon_name": info.typhoon_name, "content": ai_text, "cached": False}}
+
+
+@router.delete("/ai_cache")
+def delete_ai_cache(body: dict, current_user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
+    """清理AI分析缓存（仅删除，不重新生成）"""
+    typhoon_id = body.get("typhoon_id", "").strip()
+    analysis_type = body.get("analysis_type", "trend").strip()
+    if not typhoon_id:
+        raise HTTPException(status_code=400, detail="缺少 typhoon_id")
+    db.execute(text(
+        "DELETE FROM typhoon_ai_analysis WHERE typhoon_id = :tid AND analysis_type = :at"
+    ), {"tid": typhoon_id, "at": analysis_type})
+    db.commit()
+    return {"code": 200, "message": "缓存已清理", "data": None}

@@ -118,16 +118,21 @@
             class="px-4 py-2 rounded-xl text-sm font-medium transition-all">
             <i :class="opt.icon" class="mr-1.5"></i>{{ opt.label }}
           </button>
+          <div class="flex-1"></div>
+          <button @click="clearCache" :disabled="aiLoading"
+            class="px-4 py-2 bg-red-50 border border-red-200 text-red-500 rounded-xl text-sm font-medium hover:bg-red-100 transition-colors disabled:opacity-50 flex items-center gap-1.5">
+            <i class="fa fa-trash-o"></i>清理缓存
+          </button>
           <button @click="runAIAnalysis"
             :disabled="aiLoading"
-            class="ml-auto px-6 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl text-sm font-medium hover:shadow-lg hover:shadow-purple-600/20 transition-all disabled:opacity-60 flex items-center gap-2">
+            class="px-6 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl text-sm font-medium hover:shadow-lg hover:shadow-purple-600/20 transition-all disabled:opacity-60 flex items-center gap-2">
             <i :class="aiLoading ? 'fa fa-spinner fa-spin' : 'fa fa-play'"></i>
             {{ aiLoading ? 'AI 分析中...' : '开始分析' }}
           </button>
         </div>
         <div v-if="aiResult" class="bg-slate-50 rounded-xl p-5 border border-slate-100">
-          <div v-if="aiCached" class="text-xs text-slate-400 mb-2 flex items-center gap-1">
-            <i class="fa fa-database"></i> 缓存结果（首次生成后永久复用）
+          <div v-if="aiCached" class="text-center text-xs text-amber-500 font-medium mb-3 bg-amber-50 rounded-lg py-1.5">
+            <i class="fa fa-info-circle mr-1"></i>当前回答由缓存生成
           </div>
           <div class="prose prose-sm max-w-none text-slate-700 whitespace-pre-wrap leading-relaxed">{{ aiResult }}</div>
         </div>
@@ -394,6 +399,7 @@ let cro=null
 const analysisTypes=[{value:'trend',label:'路径趋势',icon:'fa fa-signal'},{value:'compare',label:'历史对比',icon:'fa fa-exchange'},{value:'impact',label:'影响评估',icon:'fa fa-exclamation-triangle'}]
 const selectedAnalysis=ref('trend'),aiResult=ref(''),aiCached=ref(false),aiLoading=ref(false)
 async function runAIAnalysis(){aiResult.value=''; aiCached.value=false; aiLoading.value=true; try{let{data:r}=await api.post('/api/typhoon/ai_analysis',{typhoon_id:typhoonId,analysis_type:selectedAnalysis.value},{timeout:90000}); if(r.code===200){aiResult.value=r.data.content; aiCached.value=!!r.data.cached}else aiResult.value='❌ '+r.message}catch(e){aiResult.value='❌ AI 分析请求失败'} finally{aiLoading.value=false}}
+async function clearCache(){try{await api.delete('/api/typhoon/ai_cache',{data:{typhoon_id:typhoonId,analysis_type:selectedAnalysis.value}}); aiResult.value=''; aiCached.value=false}catch(e){console.error(e)}}
 const travelResult=ref(''),travelLoading=ref(false)
 async function runTravelAdvice(){travelResult.value=''; travelLoading.value=true; try{let{data:r}=await api.post('/api/typhoon/ai_analysis',{typhoon_id:typhoonId,analysis_type:'travel'},{timeout:90000}); if(r.code===200) travelResult.value=r.data.content; else travelResult.value='❌ '+r.message}catch(e){travelResult.value='❌ 出行建议生成失败'} finally{travelLoading.value=false}}
 
