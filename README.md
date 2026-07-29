@@ -24,8 +24,8 @@
 | **后端框架** | Flask | **FastAPI**（async-ready, 自动 OpenAPI 文档） |
 | **数据库** | MySQL 8.0 | **PostgreSQL + PostGIS**（空间分析能力） |
 | **全文检索** | MySQL FULLTEXT | **PostgreSQL tsvector + GIN 索引 + 中文兜底** |
-| **空间分析** | ❌ 不支持 | **PostGIS ST_DWithin**（台风 500km / 地震 300km / 龙卷风 100km 邻近密度分析） |
-| **地图** | 高德瓦片 | **OpenStreetMap + 高德瓦片**（按场景切换） |
+| **空间分析** | MySQL查询 | **PostGIS ST_DWithin**（台风 500km / 地震 300km / 龙卷风 100km 邻近密度分析） |
+| **地图** | OpenStreetMap + 高德瓦片 | **OpenStreetMap + 高德瓦片**（按场景切换） |
 | **图表** | Canvas 2D | **Canvas 2D**（自绘，无第三方依赖） |
 | **认证** | PyJWT | **PyJWT 2.10**（UTC 时间标准化） |
 | **配置管理** | 环境变量 | **pydantic-settings + `.env`**（集中管理，密钥不入库） |
@@ -182,15 +182,15 @@ npm run dev  # http://localhost:5173
 ```
 6.0版本/
 ├── README.md                              # 项目说明（本文件）
-├── LICENSE                                # MIT 许可证
+├── LICENSE                                # 许可证
 ├── .gitignore                             # Git 忽略规则
 ├── 启动检索系统.ahk                        # AutoHotkey 一键启动
 ├── 数据库导入文件.py                        # 三大数据集一键导入脚本
 │
 ├── 数据库文件/                             # 数据库 SQL + 设计文档
 │   ├── 建表及模拟数据.sql                   #   17 张表 DDL + 索引 + 触发器
-│   ├── 数据库设计.md                       #   E-R 图 + 17 张表详细说明
-│   └── 激活PostGIS.sql                    #   PostGIS 扩展激活指南
+│   └── 数据库设计.md                       #   E-R 图 + 17 张表详细说明
+│   
 │
 ├── 数据集/                                # 原始 CSV 数据
 │   ├── 热带气旋/                           #   IBTrACS v04r01
