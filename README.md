@@ -1,4 +1,4 @@
-# 气象科学研究数据平台 — v6.0
+# 气象科学研究数据平台 — v6.1
 # 基于 Vue 3 + FastAPI + PostgreSQL + PostGIS 的前后端分离气象科学研究平台
 # 南京农业大学 · 信息与计算科学专业
 
@@ -17,9 +17,9 @@
 
 ---
 
-## v6.0 重大升级（对比 5.0）
+## v6.1 重大升级（对比 5.0）
 
-| 维度 | 5.0 (MySQL) | 6.0 (PostgreSQL + PostGIS) |
+| 维度 | 5.0 (MySQL) | 6.1 (PostgreSQL + PostGIS) |
 |:---|:---|:---|
 | **后端框架** | Flask | **FastAPI**（async-ready, 自动 OpenAPI 文档） |
 | **数据库** | MySQL 8.0 | **PostgreSQL + PostGIS**（空间分析能力） |
@@ -66,8 +66,8 @@ PostgreSQL + PostGIS (localhost:5432)
 | 层级 | 技术 | 说明 |
 |:---|:---|:---|
 | **前端框架** | Vue 3.5（Composition API） | SPA 单页应用 |
-| **前端构建** | Vite 6.0 | 极速 HMR 开发服务器 |
-| **前端路由** | Vue Router 4.5 | 24 条路由 + 导航守卫 |
+| **前端构建** | Vite 6.1 | 极速 HMR 开发服务器 |
+| **前端路由** | Vue Router 4.5 | 23 条路由 + 导航守卫 |
 | **状态管理** | Pinia 2.3 | 轻量级响应式 store |
 | **HTTP 客户端** | Axios 1.7 | JWT 拦截器 + 401 自动跳转 |
 | **CSS 框架** | Tailwind CSS（CDN） | Utility-first 原子化 CSS |
@@ -116,7 +116,7 @@ CREATE EXTENSION IF NOT EXISTS postgis;
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 ```
 
-3. 执行建库脚本（一键创建全部 17 张表 + 索引 + 触发器）：
+3. 执行建库脚本（一键创建全部 18 张表 + 索引 + 触发器）：
 ```bash
 psql -U postgres -d AcademicSearchDB -f "数据库文件/建表及模拟数据.sql"
 ```
@@ -180,7 +180,7 @@ npm run dev  # http://localhost:5173
 ## 项目结构
 
 ```
-6.0版本/
+6.1版本/
 ├── README.md                              # 项目说明（本文件）
 ├── LICENSE                                # 许可证
 ├── .gitignore                             # Git 忽略规则
@@ -188,10 +188,12 @@ npm run dev  # http://localhost:5173
 ├── 数据库导入文件.py                        # 三大数据集一键导入脚本
 │
 ├── 数据库文件/                             # 数据库 SQL + 设计文档
-│   ├── 建表及模拟数据.sql                   #   17 张表 DDL + 索引 + 触发器
-│   └── 数据库设计.md                       #   E-R 图 + 17 张表详细说明
+│   ├── 建表及模拟数据.sql                   #   18 张表 DDL + 索引 + 触发器
+│   ├── 数据库设计.md                       #   E-R 图 + 18 张表详细说明
+│   ├── 3000篇文献模拟数据.sql               #   3000 条模拟文献数据
+│   ├── 引用关系生成脚本.sql                 #   引用关系生成器
+│   └── 分类标签导入数据.sql                 #   分类标签种子数据
 │   
-│
 ├── 数据集/                                # 原始 CSV 数据
 │   ├── 热带气旋/                           #   IBTrACS v04r01
 │   ├── 地震/                              #   USGS（分年代 csv）
@@ -207,7 +209,7 @@ npm run dev  # http://localhost:5173
 │   │   │   ├── config.py                  #        pydantic-settings 配置
 │   │   │   ├── database.py                #        SQLAlchemy engine + session
 │   │   │   └── security.py                #        JWT 创建/验证/依赖注入
-│   │   ├── models/__init__.py             #        ORM 模型（17 张表）
+│   │   ├── models/__init__.py             #        ORM 模型（18 张表）
 │   │   ├── schemas/__init__.py            #        Pydantic 请求/响应模型
 │   │   ├── services/__init__.py           #        DeepSeek AI + 验证码生成
 │   │   └── routers/
@@ -220,22 +222,23 @@ npm run dev  # http://localhost:5173
 │   │       ├── stats.py                   #          统计排行 TOP10
 │   │       ├── typhoon.py                 #          台风列表/详情/路径/AI
 │   │       ├── earthquake.py              #          地震列表/详情/统计/AI
-│   │       └── tornado.py                 #          龙卷风列表/详情/AI
+│   │       ├── tornado.py                 #          龙卷风列表/详情/AI
+│   │       └── category.py                #          文献分类标签 CRUD
 │   └── uploads/                           #       PDF 存储目录（gitignored）
 │
 └── frontend/                              # Vue 3 前端
     ├── index.html
     ├── package.json                       #   前端依赖
-    ├── vite.config.js                     #   Vite 配置
+    ├── vite.config.ts                     #   Vite 配置
     └── src/
         ├── main.js                        #   Vue 启动器
         ├── App.vue                        #   根组件
         ├── api/index.js                   #   axios 实例 + JWT 拦截器
-        ├── router/index.js                #   路由表（24 条）+ 导航守卫
+        ├── router/index.js                #   路由表（23 条）+ 导航守卫
         ├── stores/                        #   Pinia 状态管理
         │   ├── auth.js                    #     认证状态
         │   └── flash.js                   #     全局消息提示
-        └── views/                         #   页面组件（24 个）
+        └── views/                         #   页面组件（23 个）
             ├── WelcomeView.vue                # 欢迎首页
             ├── DashboardView.vue              # 功能入口面板
             ├── LoginView.vue                  # 登录
@@ -250,6 +253,7 @@ npm run dev  # http://localhost:5173
             ├── SearchView.vue                 # 文献检索
             ├── DocumentView.vue               # 文献详情
             ├── UploadView.vue                 # 文献上传
+            ├── CategorySelectView.vue          # 分类选择
             ├── EditDocumentView.vue           # 文献编辑
             ├── MyDocumentsView.vue            # 个人文献库
             ├── FavoritesView.vue              # 文献收藏
@@ -264,7 +268,7 @@ npm run dev  # http://localhost:5173
 
 ## 数据库设计
 
-17 张表，完整支持三大灾害模块 + 学术文献管理。含外键、唯一约束、CHECK 约束、触发器（自动维护 PostGIS geometry 列和 tsvector 全文检索向量）。
+18 张表，完整支持三大灾害模块 + 学术文献管理。含外键、唯一约束、CHECK 约束、触发器（自动维护 PostGIS geometry 列和 tsvector 全文检索向量）。
 
 | 类别 | 表名 | 说明 |
 |:---|:---|:---|
@@ -272,6 +276,7 @@ npm run dev  # http://localhost:5173
 | 文献 | `documents` | 文献元数据 + 全文 + tsvector（GIN 索引） |
 | 文献 | `keywords` | 关键词字典 |
 | 文献 | `document_keyword` | 文献-关键词多对多关联 |
+| 文献 | `literature_categories` | 文献分类标签 |
 | 文献 | `citation` | 文献引用关系 |
 | 文献 | `favorites` | 用户收藏 |
 | 文献 | `search_history` / `browse_history` | 检索/浏览记录 |
